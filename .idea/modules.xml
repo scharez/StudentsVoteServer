@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/REST_Service_StudentsVote.iml" filepath="$PROJECT_DIR$/REST_Service_StudentsVote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StudentsVoteServer.iml" filepath="$PROJECT_DIR$/StudentsVoteServer.iml" />
     </modules>
   </component>
 </project>

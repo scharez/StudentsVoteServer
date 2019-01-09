@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="REST_Service_StudentsVote" />
+        <module name="StudentsVoteServer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="REST_Service_StudentsVote" target="1.8" />
+      <module name="StudentsVoteServer" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

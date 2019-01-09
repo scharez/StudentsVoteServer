@@ -1,10 +1,23 @@
 package repository;
 
+import entity.User;
+
 public class Repository {
 
-    public String loginCheck(String username, String password) {
-        if(username.equals("")) {
-            if(password.equals("")) {
+    public String loginCheck(User user) {
+
+
+        System.out.println(user.getUsername());
+
+        return "TEST";
+    }
+
+}
+
+/*
+
+if(user.getPassword().equals("")) {
+            if(user.getPassword().equals("")) {
                 return "login successful";
             } else {
                 return "invalid password";
@@ -12,6 +25,4 @@ public class Repository {
         } else {
             return "invalid username";
         }
-    }
-
-}
+ */
