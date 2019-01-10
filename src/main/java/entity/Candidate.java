@@ -4,25 +4,20 @@ public class Candidate {
 
     private String firstname;
     private String lastname;
-    private String electionPromise;
     private String cadidateClass;
     private String email;
     private String picture;
+    private String electionPromise;
     private int votes;
 
-    public Candidate(String firstname, String lastname, String electionPromise, String cadidateClass, String email, String picture, int votes) {
+    public Candidate(String firstname, String lastname, String cadidateClass, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.electionPromise = electionPromise;
         this.cadidateClass = cadidateClass;
         this.email = email;
-        this.picture = picture;
-        this.votes = votes;
     }
 
-    public Candidate() {
-
-    }
+    public Candidate() {}
 
     public String getFirstname() {
         return firstname;
@@ -38,14 +33,6 @@ public class Candidate {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public String getElectionPromise() {
-        return electionPromise;
-    }
-
-    public void setElectionPromise(String electionPromise) {
-        this.electionPromise = electionPromise;
     }
 
     public String getCadidateClass() {
@@ -72,6 +59,14 @@ public class Candidate {
         this.picture = picture;
     }
 
+    public String getElectionPromise() {
+        return electionPromise;
+    }
+
+    public void setElectionPromise(String electionPromise) {
+        this.electionPromise = electionPromise;
+    }
+
     public int getVotes() {
         return votes;
     }
@@ -79,6 +74,5 @@ public class Candidate {
     public void setVotes(int votes) {
         this.votes = votes;
     }
-
 
 }
