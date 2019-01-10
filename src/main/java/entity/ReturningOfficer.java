@@ -2,9 +2,9 @@ package entity;
 
 public class ReturningOfficer {
 
-    String username;
-    String password;
-    String email;
+    private String username;
+    private String password;
+    private String email;
 
     public ReturningOfficer(String username, String password, String email) {
         this.username = username;
