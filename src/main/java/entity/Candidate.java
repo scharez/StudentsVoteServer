@@ -1,27 +1,38 @@
 package entity;
 
+import javax.persistence.*;
+
 public class Candidate {
 
-    private String firstname;
-    private String lastname;
-    private String cadidateClass;
-    private String email;
-    private String picture;
-    private String electionPromise;
-    private int votes;
+    @Id
+    @GeneratedValue
+    private int     id;
 
+    private String  firstname;
+    private String  lastname;
+    private String  cadidateClass;
+    private String  email;
+    private String  picture;
+    private String  electionPromise;
+    private int     votes;
 
-    public Candidate(String firstname, String lastname, String cadidateClass, String email) {
+    public Candidate() {}
+
+    public Candidate(int id, String firstname, String lastname, String cadidateClass, String email) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.cadidateClass = cadidateClass;
         this.email = email;
     }
 
+    public int getId() {
+        return this.id;
+    }
 
-
-
-    public Candidate() {}
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -80,3 +91,4 @@ public class Candidate {
     }
 
 }
+
