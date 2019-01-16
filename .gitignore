@@ -2,4 +2,4 @@
 .idea/workspace.xml
 src/main/java/ldap/
 target/
-/src/main/resources/properties/config.properties
+/src/main/resources/properties/
