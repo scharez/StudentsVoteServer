@@ -11,7 +11,7 @@ public class Candidate {
 
     private String  firstname;
     private String  lastname;
-    private String  cadidateClass;
+    private String  candidateClass;
     private String  email;
     private String  picture;
     private String  electionPromise;
@@ -19,11 +19,11 @@ public class Candidate {
 
     public Candidate() {}
 
-    public Candidate(int id, String firstname, String lastname, String cadidateClass, String email) {
+    public Candidate(int id, String firstname, String lastname, String candidateClass, String email) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.cadidateClass = cadidateClass;
+        this.candidateClass = candidateClass;
         this.email = email;
     }
 
@@ -52,11 +52,11 @@ public class Candidate {
     }
 
     public String getCadidateClass() {
-        return cadidateClass;
+        return candidateClass;
     }
 
     public void setCadidateClass(String cadidateClass) {
-        this.cadidateClass = cadidateClass;
+        this.candidateClass = cadidateClass;
     }
 
     public String getEmail() {
