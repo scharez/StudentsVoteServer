@@ -1,12 +1,12 @@
 package repository;
 
 import entity.ReturningOfficer;
-import objects.Logincredential;
+import objects.LoginCredential;
 
 public class Repository {
 
     private ReturningOfficer rOfficer = new ReturningOfficer();
-    private Logincredential user = new Logincredential();
+    private LoginCredential user = new LoginCredential();
 
     private static Repository instance;
     private Repository() {
@@ -18,7 +18,7 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(Logincredential user) {
+    public String loginCheck(LoginCredential user) {
 
 
         System.out.println(user.getUsername());

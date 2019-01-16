@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
-import objects.Logincredential;
+import objects.LoginCredential;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -24,7 +24,7 @@ public class StudentsVoteService {
     @Path("login")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String loginCheck(Logincredential user) {
+    public String loginCheck(LoginCredential user) {
         return Repository.getInstance().loginCheck(user);
     }
 
