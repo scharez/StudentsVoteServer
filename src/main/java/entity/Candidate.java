@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.*;
 
+@Entity
 public class Candidate {
 
     @Id
@@ -91,4 +92,3 @@ public class Candidate {
     }
 
 }
-
