@@ -28,11 +28,11 @@ public class StudentsVoteService {
         return Repository.getInstance().loginCheck(user);
     }
 
-    @Path("register")
+    @Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public String register(ReturningOfficer rs){
-        return Repository.getInstance().register();
+        return Repository.getInstance().changereturningofficer(rs);
     }
 
 

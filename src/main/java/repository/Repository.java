@@ -1,12 +1,20 @@
 package repository;
 
 import entity.ReturningOfficer;
+import entity.User;
 import objects.LoginCredential;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Repository {
 
     private ReturningOfficer rOfficer = new ReturningOfficer();
-    private LoginCredential user = new LoginCredential();
+    private List<LoginCredential> logincredentials = new LinkedList<>();
+    private List<User> users = new ArrayList<>();
 
     private static Repository instance;
     private Repository() {
@@ -18,17 +26,39 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(LoginCredential user) {
+    public String loginCheck(LoginCredential login) {
+
+        if(logincredentials.contains(login.getUsername()) && logincredentials.contains(login.getPassword())){
+            users.add(new User(login.getUsername()));
+            DeclareRole(login);
 
 
-        System.out.println(user.getUsername());
+            return Jsonrole(login) + "success";
+        }
 
-        return "TEST";
+        return "Wrong username or password";
     }
 
-    public String register() {
+    private String Jsonrole(LoginCredential login) {
 
+        JsonObject role = Json.createObjectBuilder()
+                .add("", 1)
+                .build();
 
+        return null;
+    }
+
+    private void DeclareRole(LoginCredential login) {
+
+    }
+
+    private void CheckRole() {
+
+    }
+
+    public String changereturningofficer(ReturningOfficer rs) {
+        rOfficer = new ReturningOfficer();
+        rOfficer = rs;
 
         return "You are now Registered";
     }
