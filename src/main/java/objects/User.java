@@ -1,4 +1,4 @@
-package entity;
+package objects;
 
 public class User {
 
@@ -25,5 +25,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 
 }
