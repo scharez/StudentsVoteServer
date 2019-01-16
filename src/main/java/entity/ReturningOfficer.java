@@ -7,11 +7,11 @@ public class ReturningOfficer {
 
     @Id
     @GeneratedValue
-    int     id;
+    private int     id;
 
-    private String username;
-    private String password;
-    private String email;
+    private String  username;
+    private String  password;
+    private String  email;
 
     public ReturningOfficer() {}
 
