@@ -23,6 +23,6 @@ public class Main {
 
         System.out.println(String.format("Server startet at %s\nHit enter to stop ...", BASE_URI));
         System.in.read();
-        server.stop();
+        server.shutdown();
     }
 }

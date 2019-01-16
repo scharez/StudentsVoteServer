@@ -4,10 +4,10 @@
     <persistence-unit name="TestPU">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <properties>
-            <property name="eclipselink.jdbc.url" value=""/>
+            <property name="eclipselink.jdbc.url" value="${db_url}"/>
             <property name="eclipselink.jdbc.driver" value=""/>
-            <property name="eclipselink.jdbc.user" value=""/>
-            <property name="eclipselink.jdbc.password" value=""/>
+            <property name="eclipselink.jdbc.user" value="${db_user}"/>
+            <property name="eclipselink.jdbc.password" value="${db_password}"/>
         </properties>
     </persistence-unit>
 </persistence>

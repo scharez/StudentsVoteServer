@@ -1,17 +1,15 @@
 package repository;
 
-import entity.User;
+import objects.User;
 
 public class Repository {
 
     public String loginCheck(User user) {
 
-
         System.out.println(user.getUsername());
 
         return "TEST";
     }
-
 }
 
 /*

@@ -6,7 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import entity.User;
+import objects.User;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -26,5 +26,8 @@ public class StudentsVoteService {
     public String loginCheck(User user) {
         return repo.loginCheck(user);
     }
+
+
+
 
 }

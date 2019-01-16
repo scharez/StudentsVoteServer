@@ -12,6 +12,8 @@ public class ReturningOfficer {
         this.email = email;
     }
 
+
+
     public ReturningOfficer() {}
 
     public String getUsername() {

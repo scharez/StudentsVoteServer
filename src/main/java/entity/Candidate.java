@@ -10,12 +10,16 @@ public class Candidate {
     private String electionPromise;
     private int votes;
 
+
     public Candidate(String firstname, String lastname, String cadidateClass, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.cadidateClass = cadidateClass;
         this.email = email;
     }
+
+
+
 
     public Candidate() {}
 
