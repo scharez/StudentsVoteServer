@@ -1,14 +1,12 @@
 package repository;
 
 import entity.ReturningOfficer;
-import entity.User;
-
-import java.util.LinkedList;
-import java.util.List;
+import objects.Logincredential;
 
 public class Repository {
 
-    private List<ReturningOfficer> rOfficer = new LinkedList<>();
+    private ReturningOfficer rOfficer = new ReturningOfficer();
+    private Logincredential user = new Logincredential();
 
     private static Repository instance;
     private Repository() {
@@ -20,7 +18,7 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(User user) {
+    public String loginCheck(Logincredential user) {
 
 
         System.out.println(user.getUsername());
