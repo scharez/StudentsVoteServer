@@ -7,9 +7,9 @@ public class User {
 
     @Id
     @GeneratedValue
-    private int id;
+    private int     id;
 
-    private String username;
+    private String  username;
 
     public User() {}
 
