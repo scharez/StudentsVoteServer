@@ -19,8 +19,7 @@ public class Candidate {
 
     public Candidate() {}
 
-    public Candidate(int id, String firstname, String lastname, String candidateClass, String email) {
-        this.id = id;
+    public Candidate(String firstname, String lastname, String candidateClass, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.candidateClass = candidateClass;

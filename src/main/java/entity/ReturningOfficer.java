@@ -15,8 +15,7 @@ public class ReturningOfficer {
 
     public ReturningOfficer() {}
 
-    public ReturningOfficer(int id, String username, String password, String email) {
-        this.id = id;
+    public ReturningOfficer(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
