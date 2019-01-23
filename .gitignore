@@ -1,5 +1,7 @@
 .idea/emacs.xml
 .idea/workspace.xml
-src/main/java/ldap/
 target/
 /src/main/resources/properties/
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/dataSources/
