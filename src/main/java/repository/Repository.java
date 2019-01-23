@@ -3,6 +3,7 @@ package repository;
 import entity.ReturningOfficer;
 import entity.User;
 import objects.LoginCredential;
+import utils.EVSBridge;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -22,7 +23,9 @@ public class Repository {
     public static Repository getInstance() {
         if (instance == null) {
             instance = new Repository();
+
         }
+
         return instance;
     }
 
@@ -31,6 +34,7 @@ public class Repository {
         if(logincredentials.contains(login.getUsername()) && logincredentials.contains(login.getPassword())){
             users.add(new User(login.getUsername()));
             DeclareRole(login);
+
 
 
             return Jsonrole(login) + "success";
@@ -42,10 +46,10 @@ public class Repository {
     private String Jsonrole(LoginCredential login) {
 
         JsonObject role = Json.createObjectBuilder()
-                .add("", 1)
+                .add(login.getUsername(), 0)
                 .build();
 
-        return null;
+        return role.toString();
     }
 
     private void DeclareRole(LoginCredential login) {

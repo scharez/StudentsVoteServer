@@ -3,6 +3,7 @@ import java.net.URI;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import utils.EVSBridge;
 
 
 public class Main {
@@ -17,7 +18,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-
+        EVSBridge.getInstance().login("it150184","youneverknow");
         final org.glassfish.grizzly.http.server.HttpServer server = startServer();
         server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("public"), "/");
 
