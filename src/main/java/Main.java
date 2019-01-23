@@ -18,7 +18,6 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        EVSBridge.getInstance().login("it150184","youneverknow");
         final org.glassfish.grizzly.http.server.HttpServer server = startServer();
         server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("public"), "/");
 

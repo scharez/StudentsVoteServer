@@ -2,7 +2,6 @@ package repository;
 
 import entity.ReturningOfficer;
 import entity.User;
-import objects.LoginCredential;
 import utils.EVSBridge;
 
 import javax.json.Json;
@@ -14,7 +13,6 @@ import java.util.List;
 public class Repository {
 
     private ReturningOfficer rOfficer = new ReturningOfficer();
-    private List<LoginCredential> logincredentials = new LinkedList<>();
     private List<User> users = new ArrayList<>();
 
     private static Repository instance;
@@ -29,30 +27,27 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(LoginCredential login) {
+    public String loginCheck(User user) {
+        EVSBridge evs_svbridge = EVSBridge.getInstance();
 
-        if(logincredentials.contains(login.getUsername()) && logincredentials.contains(login.getPassword())){
-            users.add(new User(login.getUsername()));
-            DeclareRole(login);
-
-
-
-            return Jsonrole(login) + "success";
+        if(evs_svbridge.login(user.getUsername(), user.getPassword())){
+            System.out.println(evs_svbridge.getRole());
+            return evs_svbridge.getRole();
         }
 
         return "Wrong username or password";
     }
 
-    private String Jsonrole(LoginCredential login) {
+    private String Jsonrole(User user) {
 
         JsonObject role = Json.createObjectBuilder()
-                .add(login.getUsername(), 0)
+                .add(user.getUsername(), 0)
                 .build();
 
         return role.toString();
     }
 
-    private void DeclareRole(LoginCredential login) {
+    private void DeclareRole(User login) {
 
     }
 

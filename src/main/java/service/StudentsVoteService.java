@@ -1,6 +1,7 @@
 package service;
 
 import entity.ReturningOfficer;
+import entity.User;
 import repository.Repository;
 
 import javax.ws.rs.GET;
@@ -9,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
-import objects.LoginCredential;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -22,9 +22,9 @@ public class StudentsVoteService {
     }
 
     @Path("login")
-    @GET
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String loginCheck(LoginCredential user) {
+    public String loginCheck(User user) {
         return Repository.getInstance().loginCheck(user);
     }
 

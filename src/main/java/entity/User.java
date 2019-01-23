@@ -3,6 +3,7 @@ package entity;
 import javax.persistence.*;
 
 @Entity
+//@Table(name = "StoredUser")
 public class User {
 
     @Id
@@ -11,10 +12,21 @@ public class User {
 
     private String  username;
 
+    private String  password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public User() {}
 
-    public User(String username) {
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     public int getId() {
