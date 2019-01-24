@@ -23,7 +23,7 @@ public class StudentsVoteService {
 
     @Path("login")
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String loginCheck(User user) {
         return Repository.getInstance().loginCheck(user);
     }

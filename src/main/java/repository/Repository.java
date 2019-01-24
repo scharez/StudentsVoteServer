@@ -31,20 +31,27 @@ public class Repository {
         EVSBridge evs_svbridge = EVSBridge.getInstance();
 
         if(evs_svbridge.login(user.getUsername(), user.getPassword())){
-            System.out.println(evs_svbridge.getRole());
-            return evs_svbridge.getRole();
+            return Jsonrole(true);
         }
 
-        return "Wrong username or password";
+        return Jsonrole(false);
     }
 
-    private String Jsonrole(User user) {
+    private String Jsonrole(boolean withrightuser) {
+        JsonObject theuser;
+        if(withrightuser) {
+            EVSBridge evs_sv_bridge = EVSBridge.getInstance();
+            theuser = Json.createObjectBuilder()
+                    .add(evs_sv_bridge.getStudentId(), 0)
+                    .add(evs_sv_bridge.getRole(), 1)
+                    .build();
+        } else {
+            theuser = Json.createObjectBuilder()
+                    .add("wrong_user", 0)
+                    .build();
+        }
 
-        JsonObject role = Json.createObjectBuilder()
-                .add(user.getUsername(), 0)
-                .build();
-
-        return role.toString();
+        return theuser.toString();
     }
 
     private void DeclareRole(User login) {
