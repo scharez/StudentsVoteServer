@@ -62,7 +62,7 @@ public class Repository {
 
     }
 
-    public ReturningOfficer changereturningofficer(ReturningOfficer rs) {
+    public String changereturningofficer(ReturningOfficer rs) {
         rOfficer = new ReturningOfficer();
         rOfficer = rs;
 
@@ -70,7 +70,7 @@ public class Repository {
                 .add("username", rOfficer.getUsername())
                 .build();
 
-        return rs;
+        return rs.toString();
     }
 }
 
