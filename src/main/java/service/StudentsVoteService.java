@@ -31,7 +31,7 @@ public class StudentsVoteService {
     @Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String register(ReturningOfficer rs){
+    public ReturningOfficer register(ReturningOfficer rs){
         return Repository.getInstance().changereturningofficer(rs);
     }
 

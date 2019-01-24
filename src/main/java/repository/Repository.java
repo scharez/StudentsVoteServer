@@ -31,23 +31,23 @@ public class Repository {
         EVSBridge evs_svbridge = EVSBridge.getInstance();
 
         if(evs_svbridge.login(user.getUsername(), user.getPassword())){
-            return Jsonrole(true);
+            return EVStoJson(true);
         }
 
-        return Jsonrole(false);
+        return EVStoJson(false);
     }
 
-    private String Jsonrole(boolean withrightuser) {
+    private String EVStoJson(boolean withrightuser) {
         JsonObject theuser;
         if(withrightuser) {
             EVSBridge evs_sv_bridge = EVSBridge.getInstance();
             theuser = Json.createObjectBuilder()
-                    .add(evs_sv_bridge.getStudentId(), 0)
-                    .add(evs_sv_bridge.getRole(), 1)
+                    .add("username", evs_sv_bridge.getStudentId())
+                    .add("role", evs_sv_bridge.getRole())
                     .build();
         } else {
             theuser = Json.createObjectBuilder()
-                    .add("wrong_user", 0)
+                    .add("wrong_user", "wrong_user")
                     .build();
         }
 
@@ -62,11 +62,15 @@ public class Repository {
 
     }
 
-    public String changereturningofficer(ReturningOfficer rs) {
+    public ReturningOfficer changereturningofficer(ReturningOfficer rs) {
         rOfficer = new ReturningOfficer();
         rOfficer = rs;
 
-        return "You are now Registered";
+        JsonObject rofficer = Json.createObjectBuilder()
+                .add("username", rOfficer.getUsername())
+                .build();
+
+        return rs;
     }
 }
 
