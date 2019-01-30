@@ -9,29 +9,36 @@ public class Candidate {
     @GeneratedValue
     private int     id;
 
+    private String username;
     private String  firstname;
     private String  lastname;
     private String  candidateClass;
-    private String  email;
+    private String  abteilung;
     private String  picture;
     private String  electionPromise;
     private int     votes;
 
     public Candidate() {}
 
-    public Candidate(String firstname, String lastname, String candidateClass, String email) {
+
+
+    public Candidate(String username, String firstname, String lastname, String candidateClass, String abteilung, String picture, String electionPromise, int votes) {
+        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.candidateClass = candidateClass;
-        this.email = email;
+        this.abteilung = abteilung;
+        this.picture = picture;
+        this.electionPromise = electionPromise;
+        this.votes = votes;
     }
 
-    public int getId() {
-        return this.id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstname() {
@@ -50,20 +57,20 @@ public class Candidate {
         this.lastname = lastname;
     }
 
-    public String getCadidateClass() {
+    public String getCandidateClass() {
         return candidateClass;
     }
 
-    public void setCadidateClass(String cadidateClass) {
-        this.candidateClass = cadidateClass;
+    public void setCandidateClass(String candidateClass) {
+        this.candidateClass = candidateClass;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAbteilung() {
+        return abteilung;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAbteilung(String abteilung) {
+        this.abteilung = abteilung;
     }
 
     public String getPicture() {
@@ -89,5 +96,9 @@ public class Candidate {
     public void setVotes(int votes) {
         this.votes = votes;
     }
+
+
+
+
 
 }
