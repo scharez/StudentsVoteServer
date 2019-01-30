@@ -35,10 +35,10 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(User user) {
+    public String loginCheck(String username, String password) {
         EVSBridge evs_svbridge = EVSBridge.getInstance();
 
-        if(evs_svbridge.login(user.getUsername(), user.getPassword())){
+        if(evs_svbridge.login(username, password)){
             System.out.println(evs_svbridge.getRole());
             return EVStoJson(true);
         }
@@ -85,6 +85,7 @@ public class Repository {
     }
 
     public String setCandidate() {
+
         return null;
     }
 }

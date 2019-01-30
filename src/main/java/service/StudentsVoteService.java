@@ -24,8 +24,8 @@ public class StudentsVoteService {
     @Path("login")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public String loginCheck(User user) {
-        return Repository.getInstance().loginCheck(user);
+    public String loginCheck(String username, String password) {
+        return Repository.getInstance().loginCheck(username, password);
     }
 
     @Path("changereturningofficer")
