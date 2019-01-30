@@ -35,6 +35,13 @@ public class StudentsVoteService {
         return Repository.getInstance().changereturningofficer(rs);
     }
 
+    @Path("setCandidate")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String setCandidate(){
+        return Repository.getInstance().setCandidate();
+    }
+
 
 
 }
