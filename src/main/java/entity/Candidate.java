@@ -2,6 +2,7 @@ package entity;
 
 import javax.persistence.*;
 
+@Entity
 public class Candidate {
 
     @Id
@@ -10,7 +11,7 @@ public class Candidate {
 
     private String  firstname;
     private String  lastname;
-    private String candidateClass;
+    private String  candidateClass;
     private String  email;
     private String  picture;
     private String  electionPromise;
@@ -18,8 +19,7 @@ public class Candidate {
 
     public Candidate() {}
 
-    public Candidate(int id, String firstname, String lastname, String candidateClass, String email) {
-        this.id = id;
+    public Candidate(String firstname, String lastname, String candidateClass, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.candidateClass = candidateClass;
@@ -50,12 +50,12 @@ public class Candidate {
         this.lastname = lastname;
     }
 
-    public String getCandidateClass() {
+    public String getCadidateClass() {
         return candidateClass;
     }
 
-    public void setCandidateClass(String candidateClass) {
-        this.candidateClass = candidateClass;
+    public void setCadidateClass(String cadidateClass) {
+        this.candidateClass = cadidateClass;
     }
 
     public String getEmail() {
@@ -91,4 +91,3 @@ public class Candidate {
     }
 
 }
-

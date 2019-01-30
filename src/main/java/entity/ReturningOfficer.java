@@ -7,16 +7,15 @@ public class ReturningOfficer {
 
     @Id
     @GeneratedValue
-    int     id;
+    private int     id;
 
-    private String username;
-    private String password;
-    private String email;
+    private String  username;
+    private String  password;
+    private String  email;
 
     public ReturningOfficer() {}
 
-    public ReturningOfficer(int id, String username, String password, String email) {
-        this.id = id;
+    public ReturningOfficer(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
