@@ -1,19 +1,27 @@
 package repository;
 
+import entity.Candidate;
 import entity.ReturningOfficer;
 import entity.User;
 import utils.EVSBridge;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
 
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
+    private static EntityManager em = emf.createEntityManager();
+
     private ReturningOfficer rOfficer = new ReturningOfficer();
     private List<User> users = new ArrayList<>();
+    Candidate candidate = new Candidate();
 
     private static Repository instance;
     private Repository() {
@@ -27,10 +35,11 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(User user) {
+    public String loginCheck(String username, String password) {
         EVSBridge evs_svbridge = EVSBridge.getInstance();
 
-        if(evs_svbridge.login(user.getUsername(), user.getPassword())){
+        if(evs_svbridge.login(username, password)){
+            System.out.println(evs_svbridge.getRole());
             return EVStoJson(true);
         }
 
@@ -39,28 +48,30 @@ public class Repository {
 
     private String EVStoJson(boolean withrightuser) {
         JsonObject theuser;
-        if(withrightuser) {
-            EVSBridge evs_sv_bridge = EVSBridge.getInstance();
+        EVSBridge evs_sv_bridge = EVSBridge.getInstance();
+        String rolee = "";
+        String usernamee = "" + evs_sv_bridge.getStudentId();
+
+            if("Students".equals(evs_sv_bridge.getRole())){
+                iscandidate();
+                rolee += "Candidates";
+            } else{
+                rolee += evs_sv_bridge.getRole();
+            }
+
             theuser = Json.createObjectBuilder()
-                    .add("username", evs_sv_bridge.getStudentId())
-                    .add("role", evs_sv_bridge.getRole())
+                    .add("username", usernamee)
+                    .add("role", rolee)
                     .build();
-        } else {
-            theuser = Json.createObjectBuilder()
-                    .add("wrong_user", true)
-                    .build();
-        }
 
         return theuser.toString();
     }
 
-    private void DeclareRole(User login) {
-
+    private boolean iscandidate() {
+        return em.find(Candidate.class, EVSBridge.getInstance().getStudentId()).getUsername() == null;
     }
 
-    private void CheckRole() {
 
-    }
 
     public String changereturningofficer(ReturningOfficer rs) {
         rOfficer = new ReturningOfficer();
@@ -70,7 +81,12 @@ public class Repository {
                 .add("username", rOfficer.getUsername())
                 .build();
 
-        return rofficer.toString();
+        return rs.toString();
+    }
+
+    public String setCandidate() {
+
+        return null;
     }
 }
 

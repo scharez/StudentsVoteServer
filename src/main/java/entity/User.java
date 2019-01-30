@@ -1,40 +1,18 @@
 package entity;
 
-import javax.persistence.*;
 
-@Entity
-//@Table(name = "StoredUser")
+
+
+
 public class User {
-
-    @Id
-    @GeneratedValue
-    private int     id;
 
     private String  username;
 
-    private String  password;
+    private String  role;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public User() {}
-
-    public User(String username, String password) {
+    public User(String username, String role) {
         this.username = username;
-        this.password = password;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -45,4 +23,11 @@ public class User {
         this.username = username;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
