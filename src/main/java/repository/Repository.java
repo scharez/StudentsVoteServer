@@ -3,14 +3,12 @@ package repository;
 import entity.Candidate;
 import entity.ReturningOfficer;
 import entity.User;
-import utils.EVSBridge;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 

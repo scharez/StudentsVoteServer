@@ -1,16 +1,12 @@
 package entity;
 
-
-
-
-
 public class User {
 
     private String  username;
 
-    private String  role;
+    private Role role;
 
-    public User(String username, String role) {
+    public User(String username, Role role) {
         this.username = username;
         this.role = role;
     }
@@ -23,11 +19,11 @@ public class User {
         this.username = username;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }
