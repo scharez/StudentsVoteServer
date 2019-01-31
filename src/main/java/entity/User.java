@@ -1,5 +1,7 @@
 package entity;
 
+import utils.Role;
+
 public class User {
 
     private String  username;

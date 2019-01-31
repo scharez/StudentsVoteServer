@@ -1,11 +1,13 @@
 package repository;
 
-import entity.Candidate;
-import entity.ReturningOfficer;
-import entity.User;
+import ldapuser.LdapAuthException;
+import ldapuser.LdapException;
+import ldapuser.LdapUser;
+import org.json.JSONObject;
+import utils.CustomException;
+import utils.Role;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,63 +16,61 @@ import java.util.List;
 
 public class Repository {
 
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
-    private static EntityManager em = emf.createEntityManager();
-
-    private ReturningOfficer rOfficer = new ReturningOfficer();
-    private List<User> users = new ArrayList<>();
-    Candidate candidate = new Candidate();
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
+    private EntityManager em = emf.createEntityManager();
 
     private static Repository instance;
-    private Repository() {
-    }
+
     public static Repository getInstance() {
         if (instance == null) {
             instance = new Repository();
-
         }
-
         return instance;
     }
 
-    public String loginCheck(String username, String password) {
-        EVSBridge evs_svbridge = EVSBridge.getInstance();
 
-        if(evs_svbridge.login(username, password)){
-            System.out.println(evs_svbridge.getRole());
-            return EVStoJson(true);
+
+    public String loginCheck(String username, String password) {
+
+        Role role;
+        CustomException ce = new CustomException();
+
+        try {
+            LdapUser lu = new LdapUser(username, password.toCharArray());
+        } catch (LdapException e) {
+            e.printStackTrace();
+
+             return ce.buildException(500, "LDAP not working");
+
+        } catch (LdapAuthException e) {
+            e.printStackTrace();
+            return ce.buildException(400, "Login Error");
         }
 
-        return EVStoJson(false);
+
+        return jsonLoginBuilder(username, Role.Teacher);
     }
 
-    private String EVStoJson(boolean withrightuser) {
-        JsonObject theuser;
-        EVSBridge evs_sv_bridge = EVSBridge.getInstance();
-        String rolee = "";
-        String usernamee = "" + evs_sv_bridge.getStudentId();
+    private String jsonLoginBuilder(String username, Role role) {
 
-            if("Students".equals(evs_sv_bridge.getRole())){
-                iscandidate();
-                rolee += "Candidates";
-            } else{
-                rolee += evs_sv_bridge.getRole();
-            }
+        JSONObject user = new JSONObject();
 
-            theuser = Json.createObjectBuilder()
-                    .add("username", usernamee)
-                    .add("role", rolee)
-                    .build();
+        user.put("user",new JSONObject())
+            .put("username", username)
+            .put("role", role)
+            .put("token","muss noch generiert werden lul");
 
-        return theuser.toString();
+        return user.toString();
     }
 
-    private boolean iscandidate() {
+    /*
+    private boolean isCandidate() {
         return em.find(Candidate.class, EVSBridge.getInstance().getStudentId()).getUsername() == null;
     }
+    */
 
 
-
+    /*
     public String changereturningofficer(ReturningOfficer rs) {
         rOfficer = new ReturningOfficer();
         rOfficer = rs;
@@ -81,6 +81,8 @@ public class Repository {
 
         return rs.toString();
     }
+
+    */
 
     public String setCandidate() {
 
