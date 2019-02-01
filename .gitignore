@@ -1,7 +1,7 @@
 .idea/emacs.xml
 .idea/workspace.xml
 target/
-/src/main/resources/properties/
+/src/main/resources/Properties/
 /src/main/resources/META-INF/
 .idea/dataSources.local.xml
 .idea/dataSources.xml
