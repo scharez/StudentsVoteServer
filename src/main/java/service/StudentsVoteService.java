@@ -1,14 +1,12 @@
 package service;
 
-import entity.ReturningOfficer;
-import entity.User;
 import repository.Repository;
+import utils.User;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 
 @Path("sv")
@@ -24,9 +22,12 @@ public class StudentsVoteService {
     @Path("login")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public String loginCheck(String username, String password) {
-        return Repository.getInstance().loginCheck(username, password);
+    public String loginCheck(User user) {
+        return Repository.getInstance().loginCheck(user);
     }
+
+    /*
+
 
     @Path("changereturningofficer")
     @POST
@@ -34,6 +35,8 @@ public class StudentsVoteService {
     public String register(ReturningOfficer rs){
         return Repository.getInstance().changereturningofficer(rs);
     }
+
+    */
 
    /*
 

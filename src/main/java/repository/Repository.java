@@ -6,6 +6,7 @@ import ldapuser.LdapUser;
 import org.json.JSONObject;
 import utils.CustomException;
 import utils.Role;
+import utils.User;
 
 
 import javax.persistence.EntityManager;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class Repository {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
-    private EntityManager em = emf.createEntityManager();
+    //private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
+    //private EntityManager em = emf.createEntityManager();
 
     private static Repository instance;
 
@@ -30,11 +31,11 @@ public class Repository {
 
 
 
-    public String loginCheck(String username, String password) {
+    public String loginCheck(User user) {
 
-        Role role;
         CustomException ce = new CustomException();
 
+        /*
         try {
             LdapUser lu = new LdapUser(username, password.toCharArray());
         } catch (LdapException e) {
@@ -47,15 +48,23 @@ public class Repository {
             return ce.buildException(400, "Login Error");
         }
 
+        */
 
-        return jsonLoginBuilder(username, Role.Teacher);
+        if(user.getUsername().equals("test") && user.getPassword().equals("1234")) {
+
+
+            return jsonLoginBuilder(user.getUsername(), Role.Students);
+        }
+
+        return ce.buildException(400, "Login Error");
+
     }
 
     private String jsonLoginBuilder(String username, Role role) {
 
         JSONObject user = new JSONObject();
 
-        user.put("user",new JSONObject())
+        user
             .put("username", username)
             .put("role", role)
             .put("token","muss noch generiert werden lul");
