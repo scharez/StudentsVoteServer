@@ -7,6 +7,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 public class Main {
 
+
+
     public static final String BASE_URI = "http://localhost:8080/rest";
 
     public static org.glassfish.grizzly.http.server.HttpServer startServer() {
@@ -17,6 +19,22 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+
+        System.setProperty("javax.net.ssl.trustStore", "C:\\Users\\\"Maximilian Wiesmayr\"\\Desktop\\Schulordner\\4AHITM\\ITP\\studentsvote\\res\\keystore.bin");
+        System.setProperty("javax.net.ssl.trustStorePassword", "tracIsh3");
+        /*System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+        System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+
+
+
+        String trustStore = System.getProperty("javax.net.ssl.trustStore");
+        if (trustStore == null) {
+            System.out.println("javax.net.ssl.trustStore is not defined");
+        } else {
+            System.out.println("javax.net.ssl.trustStore = " + trustStore);
+        }*/
+
         final org.glassfish.grizzly.http.server.HttpServer server = startServer();
         server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("public"), "/");
 

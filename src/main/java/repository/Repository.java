@@ -1,5 +1,7 @@
 package repository;
 
+import entity.Candidate;
+import entity.ReturningOfficer;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
@@ -19,6 +21,8 @@ public class Repository {
 
     //private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
     //private EntityManager em = emf.createEntityManager();
+
+
 
     private static Repository instance;
 
@@ -51,7 +55,11 @@ public class Repository {
         */
 
         if(user.getUsername().equals("test") && user.getPassword().equals("1234")) {
-
+            if(isCandidate(user.getUsername())){
+                return jsonLoginBuilder(user.getUsername(), Role.Candidates);
+            } else if(isReturningOfficer(user.getUsername())){
+                return jsonLoginBuilder(user.getUsername(), Role.ADMIN);
+            }
 
             return jsonLoginBuilder(user.getUsername(), Role.Students);
         }
@@ -72,30 +80,35 @@ public class Repository {
         return user.toString();
     }
 
-    /*
-    private boolean isCandidate() {
-        return em.find(Candidate.class, EVSBridge.getInstance().getStudentId()).getUsername() == null;
-    }
-    */
 
-
-    /*
-    public String changereturningofficer(ReturningOfficer rs) {
-        rOfficer = new ReturningOfficer();
-        rOfficer = rs;
-
-        JsonObject rofficer = Json.createObjectBuilder()
-                .add("username", rOfficer.getUsername())
-                .build();
-
-        return rs.toString();
+    public boolean isCandidate(String username) {
+        //return em.find(Candidate.class, username).getUsername() == null;
+        return false;
     }
 
-    */
+    public boolean isReturningOfficer(String username) {
+        //return em.find(ReturningOfficer.class, username).getUsername() == null;
+        return false;
+    }
 
-    public String setCandidate() {
 
-        return null;
+    public String setCandidate(Candidate candidate) {
+        //em.getTransaction().begin();
+        //em.persist(candidate);
+        //em.getTransaction().commit();
+        return "got it";
+    }
+
+
+    public String changereturningofficer(ReturningOfficer rsold, ReturningOfficer rsnew) {
+        //em.getTransaction().begin();
+        /*if(em.find(ReturningOfficer.class, rsold) == null){
+            em.remove(rsold);
+            em.persist(rsnew);
+            return "changed Returning Officer";
+        }*/
+
+        return "wrong Returning Officer";
     }
 }
 

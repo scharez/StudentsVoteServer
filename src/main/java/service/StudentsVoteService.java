@@ -1,12 +1,11 @@
 package service;
 
+import entity.Candidate;
+import entity.ReturningOfficer;
 import repository.Repository;
 import utils.User;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("sv")
@@ -26,28 +25,24 @@ public class StudentsVoteService {
         return Repository.getInstance().loginCheck(user);
     }
 
-    /*
 
 
     @Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String register(ReturningOfficer rs){
-        return Repository.getInstance().changereturningofficer(rs);
+    public String register(ReturningOfficer rsold, ReturningOfficer rsnew){
+        return Repository.getInstance().changereturningofficer(rsold, rsnew);
     }
 
-    */
 
-   /*
 
     @Path("setCandidate")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String setCandidate(){
-        return Repository.getInstance().setCandidate();
+    public String setCandidate(Candidate candidate){
+        return Repository.getInstance().setCandidate(candidate);
     }
 
-*/
 
 
 }

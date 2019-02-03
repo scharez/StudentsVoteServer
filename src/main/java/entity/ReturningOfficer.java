@@ -1,9 +1,10 @@
 package entity;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-public class ReturningOfficer {
+public class ReturningOfficer implements Serializable {
 
     @Id
     @GeneratedValue
