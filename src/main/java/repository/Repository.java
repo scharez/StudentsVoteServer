@@ -11,12 +11,6 @@ import utils.Role;
 import utils.User;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Repository {
 
     //private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
@@ -51,7 +45,7 @@ public class Repository {
             e.printStackTrace();
             return ce.buildException(400, "Login Error");
         }
-
+x1
         */
 
         if(user.getUsername().equals("test") && user.getPassword().equals("1234")) {
@@ -79,6 +73,7 @@ public class Repository {
 
         return user.toString();
     }
+
 
 
     public boolean isCandidate(String username) {
