@@ -66,11 +66,12 @@ public final class LdapUser {
    * @throws LdapException wenn der Zugriff auf LDAP nicht klappt
    * @throws LdapAuthException wenn User/Password in LDAP nicht existiert
    */
+
   public LdapUser(String userId, char[] password) throws LdapException, LdapAuthException {
     this.setUserId(userId);
 
     // Zertifikat 
-    System.setProperty("javax.net.ssl.trustStore", "S:\\0pgm\\res\\keystore.bin");
+    System.setProperty("javax.net.ssl.trustStore", "/Users/scharez/Documents/4AHITM/ITP/Student´s Vote/keystore/keystore.bin");
 
     // LDAP-Properties
     Hashtable props = new Hashtable();

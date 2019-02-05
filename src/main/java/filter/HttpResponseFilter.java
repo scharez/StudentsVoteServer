@@ -18,5 +18,4 @@ public class HttpResponseFilter implements ContainerResponseFilter  {
         responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
         responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type");
     }
-
 }

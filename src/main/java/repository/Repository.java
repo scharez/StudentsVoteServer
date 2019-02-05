@@ -33,22 +33,19 @@ public class Repository {
 
         CustomException ce = new CustomException();
 
-        /*
         try {
-            LdapUser lu = new LdapUser(username, password.toCharArray());
-        } catch (LdapException e) {
-            e.printStackTrace();
+            LdapUser lu = new LdapUser(user.getUsername(), user.getPassword().toCharArray());
 
-             return ce.buildException(500, "LDAP not working");
+            return  jsonLoginBuilder(lu.getUserId(), Role.Students);
+
+        } catch (LdapException e) {
+             return ce.buildException(503, "Service Unavailable", "LDAP not working");
 
         } catch (LdapAuthException e) {
-            e.printStackTrace();
-            return ce.buildException(400, "Login Error");
+            return ce.buildException(401, "Unauthorized", "Login Error");
         }
-x1
-        */
 
-        if(user.getUsername().equals("test") && user.getPassword().equals("1234")) {
+         /* if(user.getUsername().equals("test") && user.getPassword().equals("1234")) {
             if(isCandidate(user.getUsername())){
                 return jsonLoginBuilder(user.getUsername(), Role.Candidates);
             } else if(isReturningOfficer(user.getUsername())){
@@ -58,8 +55,7 @@ x1
             return jsonLoginBuilder(user.getUsername(), Role.Students);
         }
 
-        return ce.buildException(400, "Login Error");
-
+        */
     }
 
     private String jsonLoginBuilder(String username, Role role) {
@@ -70,6 +66,8 @@ x1
             .put("username", username)
             .put("role", role)
             .put("token","muss noch generiert werden lul");
+
+        System.out.println(user.toString());
 
         return user.toString();
     }
@@ -106,16 +104,3 @@ x1
         return "wrong Returning Officer";
     }
 }
-
-/*
-
-if(user.getPassword().equals("")) {
-            if(user.getPassword().equals("")) {
-                return "login successful";
-            } else {
-                return "invalid password";
-            }
-        } else {
-            return "invalid username";
-        }
- */

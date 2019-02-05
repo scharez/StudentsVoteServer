@@ -1,5 +1,9 @@
 import java.io.IOException;
 import java.net.URI;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -20,20 +24,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        System.setProperty("javax.net.ssl.trustStore", "C:\\Users\\\"Maximilian Wiesmayr\"\\Desktop\\Schulordner\\4AHITM\\ITP\\studentsvote\\res\\keystore.bin");
-        System.setProperty("javax.net.ssl.trustStorePassword", "tracIsh3");
-        /*System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
-        System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
-        System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+        Logger l = Logger.getLogger("org.glassfish.grizzly.http.server.HttpHandler");
+        l.setLevel(Level.FINE);
+        l.setUseParentHandlers(false);
+        ConsoleHandler ch = new ConsoleHandler();
+        ch.setLevel(Level.FINE);
+        l.addHandler(ch);
 
-
-
-        String trustStore = System.getProperty("javax.net.ssl.trustStore");
-        if (trustStore == null) {
-            System.out.println("javax.net.ssl.trustStore is not defined");
-        } else {
-            System.out.println("javax.net.ssl.trustStore = " + trustStore);
-        }*/
 
         final org.glassfish.grizzly.http.server.HttpServer server = startServer();
         server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("public"), "/");
