@@ -37,8 +37,10 @@ public class Repository {
 
         CustomException ce = new CustomException();
 
+        LdapUser lu;
+
         try {
-            LdapUser lu = new LdapUser(user.getUsername(), user.getPassword().toCharArray());
+            lu = new LdapUser(user.getUsername(), user.getPassword().toCharArray());
 
         } catch (LdapException e) {
              return ce.buildException(503, "Service Unavailable", "LDAP not working");
@@ -46,14 +48,21 @@ public class Repository {
             return ce.buildException(401, "Unauthorized", "Login Error");
         }
 
-
+        if(lu.isTeacher()){
+            if(isReturningOfficer(user.getUsername())){
+                return jsonLoginBuilder(user.getUsername(), Role.ADMIN);
+            } else {
+                return jsonLoginBuilder(user.getUsername(), Role.Teacher);
+            }
+        } else {
             if(isCandidate(user.getUsername())){
                 return jsonLoginBuilder(user.getUsername(), Role.Candidates);
-            } else if(isReturningOfficer(user.getUsername())){
-                return jsonLoginBuilder(user.getUsername(), Role.ADMIN);
+            } else {
+                return jsonLoginBuilder(user.getUsername(), Role.Students);
             }
+        }
 
-            return jsonLoginBuilder(user.getUsername(), Role.Students);
+
     }
 
     private String jsonLoginBuilder(String username, Role role) {
@@ -73,11 +82,11 @@ public class Repository {
 
 
     public boolean isCandidate(String username) {
-        return em.find(Candidate.class, username).getUsername() == null;
+        return em.find(Candidate.class, username).getUsername() != null;
     }
 
     public boolean isReturningOfficer(String username) {
-        return em.find(ReturningOfficer.class, username).getUsername() == null;
+        return em.find(ReturningOfficer.class, username).getUsername() != null;
     }
 
 
