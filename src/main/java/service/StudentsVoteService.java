@@ -35,8 +35,12 @@ public class StudentsVoteService {
     @Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String register(ReturningOfficer rsold){
-        return null;
+    @Produces(MediaType.APPLICATION_JSON)
+    public String register(@QueryParam("username_old") String username_old,
+                           @QueryParam("password_old") String password_old,
+                           @QueryParam("username_new") String username_new,
+                           @QueryParam("password_new") String password_new){
+        return Repository.getInstance().changereturningofficer(username_old, password_old, username_new, password_new);
     }
 
 

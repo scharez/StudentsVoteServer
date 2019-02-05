@@ -71,7 +71,7 @@ public final class LdapUser {
     this.setUserId(userId);
 
     // Zertifikat 
-    System.setProperty("javax.net.ssl.trustStore", "/Users/scharez/Documents/4AHITM/ITP/Student´s Vote/keystore/keystore.bin");
+    System.setProperty("javax.net.ssl.trustStore", "C:\\Users\\Maximilian Wiesmayr\\Desktop\\Schulordner\\4AHITM\\ITP\\studentsvote\\res\\keystore.bin");
 
     // LDAP-Properties
     Hashtable props = new Hashtable();
