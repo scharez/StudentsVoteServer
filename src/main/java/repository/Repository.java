@@ -13,6 +13,9 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Repository {
@@ -81,12 +84,14 @@ public class Repository {
 
 
 
-    public boolean isCandidate(String username) {
-        return false;//em.find(Candidate.class, username).getUsername() != null;
+    private boolean isCandidate(String username) {
+        List<Candidate> username2 = em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class).setParameter("username", username).getResultList();
+        return !username2.isEmpty();
     }
 
-    public boolean isReturningOfficer(String username) {
-        return false;//em.find(ReturningOfficer.class, username).getUsername() != null;
+    private boolean isReturningOfficer(String username) {
+        List<ReturningOfficer> username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getResultList();
+        return !username2.isEmpty();
     }
 
 
