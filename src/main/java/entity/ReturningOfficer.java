@@ -11,14 +11,10 @@ public class ReturningOfficer implements Serializable {
 
     private String username;
 
-    private String password;
 
-
-
-    public ReturningOfficer( int id, String password, String username) {
+    public ReturningOfficer( int id, String username) {
         this.id = id;
         this.username = username;
-        this.password = password;
     }
 
     public ReturningOfficer() {
@@ -31,14 +27,6 @@ public class ReturningOfficer implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUsername() {

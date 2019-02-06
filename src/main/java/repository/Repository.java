@@ -82,11 +82,11 @@ public class Repository {
 
 
     public boolean isCandidate(String username) {
-        return em.find(Candidate.class, username).getUsername() != null;
+        return false;//em.find(Candidate.class, username).getUsername() != null;
     }
 
     public boolean isReturningOfficer(String username) {
-        return em.find(ReturningOfficer.class, username).getUsername() != null;
+        return false;//em.find(ReturningOfficer.class, username).getUsername() != null;
     }
 
 
@@ -98,7 +98,7 @@ public class Repository {
     }
 
 
-    public String changereturningofficer(String username_old, String password_old, String username_new, String password_new) {
+   /* public String changereturningofficer(String username_old, String password_old, String username_new, String password_new) {
         ReturningOfficer rsold = new ReturningOfficer(1, password_old, username_old);
         ReturningOfficer rsnew = new ReturningOfficer(1, password_new, username_new);
 
@@ -112,5 +112,5 @@ public class Repository {
         }
         em.getTransaction().commit();
         return "wrong Returning Officer";
-    }
+    } */
 }

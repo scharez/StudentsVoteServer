@@ -32,7 +32,7 @@ public class StudentsVoteService {
 
 
 
-    @Path("changereturningofficer")
+    /*@Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,7 +41,7 @@ public class StudentsVoteService {
                            @QueryParam("username_new") String username_new,
                            @QueryParam("password_new") String password_new){
         return Repository.getInstance().changereturningofficer(username_old, password_old, username_new, password_new);
-    }
+    }*/
 
 
 
