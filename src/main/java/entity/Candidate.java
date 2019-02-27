@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 public class Candidate implements Serializable {
@@ -10,20 +11,20 @@ public class Candidate implements Serializable {
     @GeneratedValue
     private int     id;
 
-    private String username;
+    private String  username;
     private String  firstname;
     private String  lastname;
     private String  candidateClass;
     private String  abteilung;
     private String  picture;
     private String  electionPromise;
-    private int     votes;
+
+    @OneToMany
+    private List<CandidateVote> candicateVotes;
 
     public Candidate() {}
 
-
-
-    public Candidate(String username, String firstname, String lastname, String candidateClass, String abteilung, String picture, String electionPromise, int votes) {
+    public Candidate(String username, String firstname, String lastname, String candidateClass, String abteilung, String picture, String electionPromise) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -31,7 +32,6 @@ public class Candidate implements Serializable {
         this.abteilung = abteilung;
         this.picture = picture;
         this.electionPromise = electionPromise;
-        this.votes = votes;
     }
 
     public String getUsername() {
@@ -89,17 +89,5 @@ public class Candidate implements Serializable {
     public void setElectionPromise(String electionPromise) {
         this.electionPromise = electionPromise;
     }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
-
-
-
-
 
 }

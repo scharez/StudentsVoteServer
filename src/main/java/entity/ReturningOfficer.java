@@ -38,4 +38,3 @@ public class ReturningOfficer implements Serializable {
     }
 
 }
-
