@@ -1,16 +1,15 @@
 package service;
 
 import entity.Candidate;
-import entity.ReturningOfficer;
 import repository.Repository;
 import utils.User;
-
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("sv")
 public class StudentsVoteService {
+
+
 
     @Path("message")
     @GET

@@ -1,5 +1,6 @@
 package repository;
 
+import JWT.JwtBuilder;
 import entity.Candidate;
 import entity.ReturningOfficer;
 import ldapuser.LdapAuthException;
@@ -51,31 +52,34 @@ public class Repository {
             return ce.buildException(401, "Unauthorized", "Login Error");
         }
 
+        String sometoken;
         if(lu.isTeacher()){
+            sometoken = new JwtBuilder().create(user.getUsername());
             if(isReturningOfficer(user.getUsername())){
-                return jsonLoginBuilder(user.getUsername(), Role.ADMIN);
+                return jsonLoginBuilder(user.getUsername(), Role.ADMIN, sometoken);
             } else {
-                return jsonLoginBuilder(user.getUsername(), Role.Teacher);
+                return jsonLoginBuilder(user.getUsername(), Role.Teacher, sometoken);
             }
         } else {
+            sometoken = new JwtBuilder().create(user.getUsername());
             if(isCandidate(user.getUsername())){
-                return jsonLoginBuilder(user.getUsername(), Role.Candidates);
+                return jsonLoginBuilder(user.getUsername(), Role.Candidates, sometoken);
             } else {
-                return jsonLoginBuilder(user.getUsername(), Role.Students);
+                return jsonLoginBuilder(user.getUsername(), Role.Students, sometoken);
             }
         }
 
 
     }
 
-    private String jsonLoginBuilder(String username, Role role) {
+    private String jsonLoginBuilder(String username, Role role, String token) {
 
         JSONObject user = new JSONObject();
 
         user
             .put("username", username)
             .put("role", role)
-            .put("token","muss noch generiert werden lul");
+            .put("token", token);
 
         System.out.println(user.toString());
 

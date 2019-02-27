@@ -10,12 +10,12 @@ public class CustomException {
 
     public String buildException(int code, String error, String message) {
 
-        JSONObject user = new JSONObject();
+        JSONObject ce = new JSONObject();
 
-            user.put("statusCode", code)
+            ce.put("statusCode", code)
                     .put("error", error)
                     .put("message", message);
 
-        return user.toString();
+        return ce.toString();
     }
 }
