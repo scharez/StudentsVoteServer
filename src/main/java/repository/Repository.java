@@ -1,6 +1,6 @@
 package repository;
 
-import JWT.JwtBuilder;
+import jwt.JwtBuilder;
 import entity.Candidate;
 import entity.ReturningOfficer;
 import ldapuser.LdapAuthException;
@@ -14,8 +14,6 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -95,6 +93,8 @@ public class Repository {
 
     private boolean isReturningOfficer(String username) {
         List<ReturningOfficer> username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getResultList();
+        System.err.println(username2 + "lol pfusch!");
+
         return !username2.isEmpty();
     }
 

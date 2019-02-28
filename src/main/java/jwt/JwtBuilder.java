@@ -1,10 +1,9 @@
-package JWT;
+package jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class JwtBuilder {
