@@ -29,6 +29,25 @@ public class StudentsVoteService {
         return Repository.getInstance().loginCheck(user);
     }
 
+    @Path("getCandidates")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getCandidates(){
+
+        return Repository.getInstance().getCandidate();
+    }
+
+    @Path("getfullCandidates")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getfullCandidates(){
+
+        return Repository.getInstance().getCandidate();
+    }
+
+
 
 
     /*@Path("changereturningofficer")

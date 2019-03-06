@@ -1,8 +1,8 @@
 package repository;
 
-import jwt.JwtBuilder;
 import entity.Candidate;
 import entity.ReturningOfficer;
+import jwt.JwtBuilder;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
@@ -93,7 +93,6 @@ public class Repository {
 
     private boolean isReturningOfficer(String username) {
         List<ReturningOfficer> username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getResultList();
-        System.err.println(username2 + "lol pfusch!");
 
         return !username2.isEmpty();
     }
@@ -104,6 +103,29 @@ public class Repository {
         em.persist(candidate);
         em.getTransaction().commit();
         return "got it";
+    }
+
+    public String getCandidate() {
+
+
+        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
+        return jsonCandidate(candidates);
+    }
+
+    private String jsonCandidate(List<Candidate> candidates) {
+
+        JSONObject jsonC = new JSONObject();
+        int i = 0;
+
+        for(Candidate candidate : candidates){
+            System.out.println(candidate.getFirstname());
+            jsonC.put("can" + i + "_username", candidate.getUsername())
+                 .put("can" + i + "_firstname", candidate.getFirstname())
+                 .put("can" + i + "_lastname", candidate.getLastname());
+            i++;
+        }
+        i = 0;
+        return jsonC.toString();
     }
 
 
