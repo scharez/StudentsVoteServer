@@ -18,11 +18,18 @@ public class CandidateVote {
 
     public CandidateVote() {}
 
-    public CandidateVote(Candidate candidate, int score, int first, String schoolClass) {
+    public CandidateVote(Candidate candidate, String schoolClass) {
         this.candidate = candidate;
-        this.score = score;
-        this.first = first;
+        this.score = 0;
+        this.first = 0;
         this.schoolClass = schoolClass;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
+        if (score == 6) {
+            this.first++;
+        }
     }
 
     public int getId() {
