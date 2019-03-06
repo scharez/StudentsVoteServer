@@ -1,5 +1,7 @@
 package repository;
 
+import entity.CandidateVote;
+import jwt.JwtBuilder;
 import entity.Candidate;
 import entity.ReturningOfficer;
 import jwt.JwtBuilder;
@@ -14,6 +16,7 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +25,11 @@ public class Repository {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
     private EntityManager em = emf.createEntityManager();
 
-
+    //
+    private List<CandidateVote> cvs = new ArrayList<>();
+    private List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
+    private int candidateCounter = 0;
+    //
 
     private static Repository instance;
 
@@ -126,6 +133,38 @@ public class Repository {
         }
         i = 0;
         return jsonC.toString();
+    }
+
+
+    public void parseJson(String json) {
+        JSONObject singleVote = new JSONObject(json);
+
+        String username = singleVote.getString("id");
+        int score = singleVote.getInt("score");
+        String schoolClass = singleVote.getString("class");
+
+        if(cvs.size() < candidates.size()) {
+            boolean found = false;
+            for(CandidateVote cv : cvs) {
+                if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                for(Candidate c : this.candidates) {
+                    if(c.getUsername().equals(username)) {
+                        cvs.add(new CandidateVote(c, schoolClass));
+                    }
+                }
+            }
+        }
+
+        for(CandidateVote cv : this.cvs) {
+            if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
+                cv.addScore(score);
+            }
+        }
+
     }
 
 
