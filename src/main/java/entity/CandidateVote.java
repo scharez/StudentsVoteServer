@@ -30,6 +30,7 @@ public class CandidateVote {
         if (score == 6) {
             this.first++;
         }
+        System.out.println(this.candidate.getUsername() + ": " + this.score + ", " + this.first);
     }
 
     public int getId() {

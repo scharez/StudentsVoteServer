@@ -51,6 +51,20 @@ public class StudentsVoteService {
         return Repository.getInstance().setCandidate(candidate);
     }
 
+    @Path("instanceCVs")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String instanceCVs(String schoolClass) {
+        System.out.println("CVs created.");
+        return Repository.getInstance().instanceCVs(schoolClass);
+    }
 
+    @Path("parseJson")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String parseJson(String username, int score) {
+        System.out.println("Points added.");
+        return Repository.getInstance().parseJson(username, score);
+    }
 
 }

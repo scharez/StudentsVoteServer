@@ -25,9 +25,9 @@ public class Repository {
     private EntityManager em = emf.createEntityManager();
 
     //
-    private List<CandidateVote> cvs = new ArrayList<>();
-    private List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
-    private int candidateCounter = 0;
+    private List<CandidateVote> cvs;
+    private final List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
+    //private int candidateCounter = 0;
     //
 
     private static Repository instance;
@@ -113,14 +113,39 @@ public class Repository {
     }
 
 
-    public void parseJson(String json) {
+    public String instanceCVs(String schoolClass) {
+        cvs = new ArrayList<>();
+        for(Candidate c : candidates) {
+            cvs.add(new CandidateVote(c, schoolClass));
+        }
+        return "CVs created.";
+    }
+
+    public String parseJson(String username, int score) {
+        for(CandidateVote cv : cvs) {
+            if(cv.getCandidate().getUsername().equals(username)) {
+                cv.addScore(score);
+            }
+        }
+        return score + " Points added to candidate " + username;
+    }
+
+    /*public String parseJson(String json) {
         JSONObject singleVote = new JSONObject(json);
 
         String username = singleVote.getString("id");
         int score = singleVote.getInt("score");
-        String schoolClass = singleVote.getString("class");
 
-        if(cvs.size() < candidates.size()) {
+        for(CandidateVote cv : cvs) {
+            if(cv.getCandidate().getUsername().equals(username)) {
+                cv.addScore(score);
+            }
+        }
+
+        return score + " Points added to candidate " + username;
+    }*/
+
+    /*if(cvs.size() < candidates.size()) {
             boolean found = false;
             for(CandidateVote cv : cvs) {
                 if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
@@ -139,11 +164,9 @@ public class Repository {
         for(CandidateVote cv : this.cvs) {
             if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
                 cv.addScore(score);
+                System.out.println("Score added.");
             }
-        }
-
-    }
-
+        }*/
 
    /* public String changereturningofficer(String username_old, String password_old, String username_new, String password_new) {
         ReturningOfficer rsold = new ReturningOfficer(1, password_old, username_old);
