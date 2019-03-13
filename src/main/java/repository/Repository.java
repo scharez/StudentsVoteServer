@@ -25,7 +25,7 @@ public class Repository {
     private EntityManager em = emf.createEntityManager();
 
     //
-    private List<CandidateVote> cvs;
+    private List<CandidateVote> cvs = new ArrayList<>();
     private final List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
     //private int candidateCounter = 0;
     //
@@ -114,23 +114,14 @@ public class Repository {
 
 
     public String instanceCVs(String schoolClass) {
-        cvs = new ArrayList<>();
+        this.cvs.clear();
         for(Candidate c : candidates) {
             cvs.add(new CandidateVote(c, schoolClass));
         }
         return "CVs created.";
     }
 
-    public String parseJson(String username, int score) {
-        for(CandidateVote cv : cvs) {
-            if(cv.getCandidate().getUsername().equals(username)) {
-                cv.addScore(score);
-            }
-        }
-        return score + " Points added to candidate " + username;
-    }
-
-    /*public String parseJson(String json) {
+    public String parseJson(String json) {
         JSONObject singleVote = new JSONObject(json);
 
         String username = singleVote.getString("id");
@@ -143,7 +134,17 @@ public class Repository {
         }
 
         return score + " Points added to candidate " + username;
-    }*/
+    }
+
+    public String persistCVs() {
+        em.getTransaction().begin();
+        for(CandidateVote cv : cvs) {
+            em.persist(cv);
+        }
+        em.getTransaction().commit();
+        this.cvs.clear();
+        return "CVs comitted.";
+    }
 
     /*if(cvs.size() < candidates.size()) {
             boolean found = false;

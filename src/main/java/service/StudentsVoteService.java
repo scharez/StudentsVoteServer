@@ -51,6 +51,7 @@ public class StudentsVoteService {
         return Repository.getInstance().setCandidate(candidate);
     }
 
+
     @Path("instanceCVs")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -61,10 +62,17 @@ public class StudentsVoteService {
 
     @Path("parseJson")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String parseJson(String username, int score) {
-        System.out.println("Points added.");
-        return Repository.getInstance().parseJson(username, score);
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String parseJson(String json) {
+        System.out.println("Points added. " + json);
+        return Repository.getInstance().parseJson(json);
+    }
+
+    @Path("persistCVs")
+    @POST
+    public String persistCVs() {
+        System.out.println("CVs persisted");
+        return Repository.getInstance().persistCVs();
     }
 
 }
