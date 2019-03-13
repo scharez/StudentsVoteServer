@@ -31,8 +31,8 @@ public class Repository {
 
     //
     private List<CandidateVote> cvs = new ArrayList<>();
-    private List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
-    private int candidateCounter = 0;
+    private final List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
+    //private int candidateCounter = 0;
     //
 
     private static Repository instance;
@@ -104,6 +104,7 @@ public class Repository {
 
     private boolean isReturningOfficer(String username) {
         List<ReturningOfficer> username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getResultList();
+        System.err.println(username2 + "lol pfusch!");
 
         return !username2.isEmpty();
     }
@@ -164,14 +165,40 @@ public class Repository {
     }
 
 
-    public void parseJson(String json) {
+    public String instanceCVs(String schoolClass) {
+        this.cvs.clear();
+        for(Candidate c : candidates) {
+            cvs.add(new CandidateVote(c, schoolClass));
+        }
+        return "CVs created.";
+    }
+
+    public String parseJson(String json) {
         JSONObject singleVote = new JSONObject(json);
 
         String username = singleVote.getString("id");
         int score = singleVote.getInt("score");
-        String schoolClass = singleVote.getString("class");
 
-        if(cvs.size() < candidates.size()) {
+        for(CandidateVote cv : cvs) {
+            if(cv.getCandidate().getUsername().equals(username)) {
+                cv.addScore(score);
+            }
+        }
+
+        return score + " Points added to candidate " + username;
+    }
+
+    public String persistCVs() {
+        em.getTransaction().begin();
+        for(CandidateVote cv : cvs) {
+            em.persist(cv);
+        }
+        em.getTransaction().commit();
+        this.cvs.clear();
+        return "CVs comitted.";
+    }
+
+    /*if(cvs.size() < candidates.size()) {
             boolean found = false;
             for(CandidateVote cv : cvs) {
                 if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
@@ -190,6 +217,7 @@ public class Repository {
         for(CandidateVote cv : this.cvs) {
             if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
                 cv.addScore(score);
+                System.out.println("Score added.");
             }
         }
 
