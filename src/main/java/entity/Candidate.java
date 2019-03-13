@@ -1,5 +1,6 @@
 package entity;
 
+import java.io.File;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.*;
@@ -15,23 +16,25 @@ public class Candidate implements Serializable {
     private String  firstname;
     private String  lastname;
     private String  candidateClass;
-    private String  abteilung;
-    private String  picture;
+    private String  department;
+    private File    picture;
     private String  electionPromise;
+    private int     votes;
+    private int     first;
 
     @OneToMany
     private List<CandidateVote> candicateVotes;
 
     public Candidate() {}
 
-    public Candidate(String username, String firstname, String lastname, String candidateClass, String abteilung, String picture, String electionPromise) {
-        this.username = username;
+    public Candidate(String username, String firstname, String lastname, String candidateClass, String department, File picture, String electionPromise) {
         this.firstname = firstname;
         this.lastname = lastname;
+        this.department = department;
         this.candidateClass = candidateClass;
-        this.abteilung = abteilung;
-        this.picture = picture;
+        this.username = username;
         this.electionPromise = electionPromise;
+        this.picture = picture;
     }
 
     public String getUsername() {
@@ -67,18 +70,18 @@ public class Candidate implements Serializable {
     }
 
     public String getAbteilung() {
-        return abteilung;
+        return department;
     }
 
-    public void setAbteilung(String abteilung) {
-        this.abteilung = abteilung;
+    public void setAbteilung(String department) {
+        this.department = department;
     }
 
-    public String getPicture() {
+    public File getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(File picture) {
         this.picture = picture;
     }
 
@@ -88,6 +91,22 @@ public class Candidate implements Serializable {
 
     public void setElectionPromise(String electionPromise) {
         this.electionPromise = electionPromise;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public void setFirst(int first) {
+        this.first = first;
     }
 
 }
