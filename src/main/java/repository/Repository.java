@@ -15,6 +15,11 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +117,53 @@ public class Repository {
         return "got it";
     }
 
+    public String getCandidate(boolean full) {
+
+
+        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
+        if(full){
+            return jsonCandidate(candidates);
+        } else {
+            return jsonfullCandidate(candidates);
+        }
+    }
+
+    private String jsonfullCandidate(List<Candidate> candidates) {
+
+        JSONObject jsonC = new JSONObject();
+        int i = 0;
+
+        for(Candidate candidate : candidates){
+            System.out.println(candidate.getFirstname());
+            jsonC.put("can" + i + "_username", candidate.getUsername())
+                    .put("can" + i + "_firstname", candidate.getFirstname())
+                    .put("can" + i + "_lastname", candidate.getLastname())
+                    .put("can" + i + "_zweig", candidate.getAbteilung())
+                    .put("can" + i + "_klasse", candidate.getCandidateClass())
+                    .put("can" + i + "_wahlversprechen", candidate.getElectionPromise())
+                    .put("can" + i + "_bild", candidate.getPicture());
+            i++;
+        }
+        i = 0;
+        return jsonC.toString();
+    }
+
+    private String jsonCandidate(List<Candidate> candidates) {
+
+        JSONObject jsonC = new JSONObject();
+        int i = 0;
+
+        for(Candidate candidate : candidates){
+            System.out.println(candidate.getFirstname());
+            jsonC.put("can" + i + "_username", candidate.getUsername())
+                 .put("can" + i + "_firstname", candidate.getFirstname())
+                 .put("can" + i + "_lastname", candidate.getLastname());
+            i++;
+        }
+        i = 0;
+        return jsonC.toString();
+    }
+
 
     public String instanceCVs(String schoolClass) {
         this.cvs.clear();
@@ -168,7 +220,40 @@ public class Repository {
                 cv.addScore(score);
                 System.out.println("Score added.");
             }
-        }*/
+        }
+
+    }
+
+    /*public void saveimage(File file, int id) {
+        em.getTransaction().begin();
+        Candidate can = em.find(Candidate.class, id);
+        can.setPicture(file);
+        em.merge(can);
+        em.getTransaction().commit();
+    }*/
+
+    public void endelection() {
+        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
+        List<CandidateVote> candidateVotes = em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList();
+        int score = 0;
+        int first = 0;
+        em.getTransaction().begin();
+        for(Candidate candidate : candidates){
+
+             for(CandidateVote candidateVote : candidateVotes){
+                 if(candidateVote.getCandidate() == candidate){
+                     score = score + candidateVote.getScore();
+                     first = first + candidateVote.getFirst();
+                 }
+             }
+             candidate.setVotes(score);
+             candidate.setFirst(first);
+             em.merge(candidate);
+        }
+        em.getTransaction().commit();
+
+    }
+
 
    /* public String changereturningofficer(String username_old, String password_old, String username_new, String password_new) {
         ReturningOfficer rsold = new ReturningOfficer(1, password_old, username_old);

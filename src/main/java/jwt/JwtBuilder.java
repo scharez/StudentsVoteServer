@@ -13,7 +13,7 @@ public class JwtBuilder {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setSubject(subject)
                 .claim("currTime", System.currentTimeMillis())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .setExpiration(new Date(System.currentTimeMillis() + 10000))
                 .compact();
     }
     public String checkSubject(String token) {
