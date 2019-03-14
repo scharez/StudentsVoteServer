@@ -54,7 +54,7 @@ public class StudentsVoteService {
 
     @Path("instanceCVs")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     public String instanceCVs(String schoolClass) {
         System.out.println("CVs created.");
         return Repository.getInstance().instanceCVs(schoolClass);

@@ -115,6 +115,7 @@ public class Repository {
 
     public String instanceCVs(String schoolClass) {
         this.cvs.clear();
+        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
         for(Candidate c : candidates) {
             cvs.add(new CandidateVote(c, schoolClass));
         }
