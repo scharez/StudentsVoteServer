@@ -1,5 +1,6 @@
 package repository;
 
+import entity.Result;
 import entity.CandidateVote;
 import jwt.JwtBuilder;
 import entity.Candidate;
@@ -15,11 +16,6 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +109,8 @@ public class Repository {
     public String setCandidate(Candidate candidate) {
         em.getTransaction().begin();
         em.persist(candidate);
+        Result res = new Result(candidate);
+        em.persist(res);
         em.getTransaction().commit();
         return "got it";
     }
@@ -182,7 +180,10 @@ public class Repository {
 
         for(CandidateVote cv : cvs) {
             if(cv.getCandidate().getUsername().equals(username)) {
-                cv.addScore(score);
+                cv.setScore(cv.getScore() + score);
+                if(score == 6) {
+                    cv.setFirst(cv.getFirst() + 1);
+                }
             }
         }
 
@@ -199,41 +200,25 @@ public class Repository {
         return "CVs comitted.";
     }
 
-    /*if(cvs.size() < candidates.size()) {
-            boolean found = false;
-            for(CandidateVote cv : cvs) {
-                if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
-                    found = true;
-                }
-            }
-            if(!found) {
-                for(Candidate c : this.candidates) {
-                    if(c.getUsername().equals(username)) {
-                        cvs.add(new CandidateVote(c, schoolClass));
-                    }
+    public String endElection() {
+        List<CandidateVote> candidateVotes = em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList();
+        List<Result> results = em.createQuery("SELECT r FROM Result r", Result.class).getResultList();
+        em.getTransaction().begin();
+        for(CandidateVote candidateVote : candidateVotes) {
+            for(Result result : results) {
+                if(candidateVote.getCandidate().equals(result.getCandidate())) {
+                    result.setScore(result.getScore() + candidateVote.getScore());
+                    result.setFirst(result.getFirst() + candidateVote.getFirst());
+                    em.merge(result);
                 }
             }
         }
-
-        for(CandidateVote cv : this.cvs) {
-            if(cv.getCandidate().getUsername().equals(username) && cv.getSchoolClass().equals(schoolClass)) {
-                cv.addScore(score);
-                System.out.println("Score added.");
-            }
-        }
-
+        em.getTransaction().commit();
+        return "Results commited.";
     }
 
-    /*public void saveimage(File file, int id) {
-        em.getTransaction().begin();
-        Candidate can = em.find(Candidate.class, id);
-        can.setPicture(file);
-        em.merge(can);
-        em.getTransaction().commit();
-    }*/
-
     public void endelection() {
-        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
+        List<Result> results = em.createQuery("SELECT r FROM Result r", Result.class).getResultList();
         List<CandidateVote> candidateVotes = em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList();
         int score = 0;
         int first = 0;

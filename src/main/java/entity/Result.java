@@ -3,26 +3,24 @@ package entity;
 import javax.persistence.*;
 
 @Entity
-public class CandidateVote {
+public class Result {
 
     @Id
     @GeneratedValue
     private int         id;
 
-    @ManyToOne
+    @OneToOne
     private Candidate   candidate;
 
     private int         score;
     private int         first;
-    private String      schoolClass;
 
-    public CandidateVote() {}
+    public Result() {}
 
-    public CandidateVote(Candidate candidate, String schoolClass) {
+    public Result(Candidate candidate) {
         this.candidate = candidate;
         this.score = 0;
         this.first = 0;
-        this.schoolClass = schoolClass;
     }
 
     public int getId() {
@@ -55,14 +53,6 @@ public class CandidateVote {
 
     public void setFirst(int first) {
         this.first = first;
-    }
-
-    public String getSchoolClass() {
-        return schoolClass;
-    }
-
-    public void setSchoolClass(String schoolClass) {
-        this.schoolClass = schoolClass;
     }
 
 }

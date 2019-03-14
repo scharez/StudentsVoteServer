@@ -123,4 +123,11 @@ public class StudentsVoteService {
         return Repository.getInstance().persistCVs();
     }
 
+    @Path("endElection")
+    @POST
+    public String endElection() {
+        System.out.println("Results persisted.");
+        return Repository.getInstance().endElection();
+    }
+
 }
