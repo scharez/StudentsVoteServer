@@ -183,7 +183,7 @@ public class Repository {
         for(CandidateVote cv : cvs) {
             if(cv.getCandidate().getUsername().equals(username)) {
                 cv.setScore(cv.getScore() + score);
-                if(score == 6) {
+                if((cv.getCandidate().getPosition().equals("idS") && score == 6) || (cv.getCandidate().getPosition().equals("idA") && score == 2)) {
                     cv.setFirst(cv.getFirst() + 1);
                 }
             }
