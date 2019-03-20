@@ -19,20 +19,30 @@ public class Candidate implements Serializable {
     private String  department;
     private File    picture;
     private String  electionPromise;
+    private String  position;
 
     @OneToMany
     private List<CandidateVote> candicateVotes;
 
     public Candidate() {}
 
-    public Candidate(String username, String firstname, String lastname, String candidateClass, String department, File picture, String electionPromise) {
+    public Candidate(String username, String firstname, String lastname, String candidateClass, String department, File picture, String electionPromise, String position) {
+        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.department = department;
         this.candidateClass = candidateClass;
-        this.username = username;
-        this.electionPromise = electionPromise;
+        this.department = department;
         this.picture = picture;
+        this.electionPromise = electionPromise;
+        this.position = position;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -67,11 +77,11 @@ public class Candidate implements Serializable {
         this.candidateClass = candidateClass;
     }
 
-    public String getAbteilung() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setAbteilung(String department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 
@@ -89,6 +99,22 @@ public class Candidate implements Serializable {
 
     public void setElectionPromise(String electionPromise) {
         this.electionPromise = electionPromise;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public List<CandidateVote> getCandicateVotes() {
+        return candicateVotes;
+    }
+
+    public void setCandicateVotes(List<CandidateVote> candicateVotes) {
+        this.candicateVotes = candicateVotes;
     }
 
 }

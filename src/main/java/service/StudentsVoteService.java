@@ -83,6 +83,8 @@ public class StudentsVoteService {
         return "lol";
     }
 
+    //Aufruf: Am Beginn der Wahl in einer Klasse
+    //Funktion: Die teporär gespeicherten CVs werden gelöcht. Dann wird für jeden Candidate ein CV angelegt
     @Path("instanceCVs")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
@@ -91,6 +93,8 @@ public class StudentsVoteService {
         return Repository.getInstance().instanceCVs(schoolClass);
     }
 
+    //Aufruf: Nach dem Eintragen eines einzelnen Stimmzettels
+    //Funktion: Die Punkte eines einzelnen Candidates wird im entsprechenden CV hinzugefügt
     @Path("parseJson")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
@@ -99,7 +103,8 @@ public class StudentsVoteService {
         return Repository.getInstance().parseJson(json);
     }
 
-
+    //Aufruf: Nach dem Abschluss einer Wahl in einer einzelnen Klasse
+    // Funktion: Persistiert alle temporär gespeicherten CVs und löscht sie danach
     @Path("persistCVs")
     @POST
     public String persistCVs() {
@@ -107,7 +112,8 @@ public class StudentsVoteService {
         return Repository.getInstance().persistCVs();
     }
 
-    //Nachdem die Wahlen in allen Klassen abgeschlossen sind, werden die einzelnen CVs  persistiert.
+    //Aufruf: Nachdem die Wahlen in allen Klassen abgeschlossen sind
+    //Funktion: Die einzelnen CVs werden in dem jeweiligen Result zusammengefügt und diese werden anschließend persistiert
     @Path("endElection")
     @POST
     public String endElection() {
