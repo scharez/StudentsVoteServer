@@ -7,6 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 import java.io.File;
+import java.util.List;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -33,11 +34,11 @@ public class StudentsVoteService {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String getCandidates(){
-
-        return Repository.getInstance().getCandidate(false);
+    public List<Candidate> getCandidates(){
+        return Repository.getInstance().getCandidates();
     }
 
+    /*
     @Path("getfullCandidates")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -46,6 +47,7 @@ public class StudentsVoteService {
 
         return Repository.getInstance().getCandidate(true);
     }
+    */
 
     /*@Path("changereturningofficer")
     @POST
@@ -97,6 +99,7 @@ public class StudentsVoteService {
         return Repository.getInstance().parseJson(json);
     }
 
+
     @Path("persistCVs")
     @POST
     public String persistCVs() {
@@ -104,6 +107,7 @@ public class StudentsVoteService {
         return Repository.getInstance().persistCVs();
     }
 
+    //Nachdem die Wahlen in allen Klassen abgeschlossen sind, werden die einzelnen CVs  persistiert.
     @Path("endElection")
     @POST
     public String endElection() {

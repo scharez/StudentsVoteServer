@@ -160,7 +160,7 @@ public class Repository {
     }
     */
 
-    public List<Candidate> getCandidate() {
+    public List<Candidate> getCandidates() {
         return em.createQuery("SELECT c FROM Candidate c").getResultList();
     }
 
