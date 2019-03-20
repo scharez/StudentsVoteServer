@@ -19,8 +19,6 @@ public class Candidate implements Serializable {
     private String  department;
     private File    picture;
     private String  electionPromise;
-    private int     votes;
-    private int     first;
 
     @OneToMany
     private List<CandidateVote> candicateVotes;
@@ -91,22 +89,6 @@ public class Candidate implements Serializable {
 
     public void setElectionPromise(String electionPromise) {
         this.electionPromise = electionPromise;
-    }
-
-    public int getVotes() {
-        return votes;
-    }
-
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
-
-    public int getFirst() {
-        return first;
-    }
-
-    public void setFirst(int first) {
-        this.first = first;
     }
 
 }

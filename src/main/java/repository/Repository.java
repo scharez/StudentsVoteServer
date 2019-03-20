@@ -94,28 +94,26 @@ public class Repository {
 
 
     private boolean isCandidate(String username) {
-        List<Candidate> username2 = em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class).setParameter("username", username).getResultList();
-        return !username2.isEmpty();
+        Candidate username2 = em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class).setParameter("username", username).getSingleResult();
+        return !username2.equals(null);
     }
 
     private boolean isReturningOfficer(String username) {
-        List<ReturningOfficer> username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getResultList();
-        System.err.println(username2 + "lol pfusch!");
-
-        return !username2.isEmpty();
+        ReturningOfficer username2 = em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getSingleResult();
+        return !username2.equals(null);
     }
 
 
     public String setCandidate(Candidate candidate) {
         em.getTransaction().begin();
         em.persist(candidate);
-        Result res = new Result(candidate);
-        em.persist(res);
+        em.persist(new Result(candidate));
         em.getTransaction().commit();
-        return "got it";
+        return "Candidate set.";
     }
 
-    public String getCandidate(boolean full) {
+    /*
+    public String getCandidate2(boolean full) {
 
 
         List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
@@ -154,12 +152,16 @@ public class Repository {
         for(Candidate candidate : candidates){
             System.out.println(candidate.getFirstname());
             jsonC.put("can" + i + "_username", candidate.getUsername())
-                 .put("can" + i + "_firstname", candidate.getFirstname())
-                 .put("can" + i + "_lastname", candidate.getLastname());
+                    .put("can" + i + "_firstname", candidate.getFirstname())
+                    .put("can" + i + "_lastname", candidate.getLastname());
             i++;
         }
-        i = 0;
         return jsonC.toString();
+    }
+    */
+
+    public List<Candidate> getCandidate() {
+        return em.createQuery("SELECT c FROM Candidate c").getResultList();
     }
 
 
@@ -216,29 +218,6 @@ public class Repository {
         em.getTransaction().commit();
         return "Results commited.";
     }
-
-    public void endelection() {
-        List<Result> results = em.createQuery("SELECT r FROM Result r", Result.class).getResultList();
-        List<CandidateVote> candidateVotes = em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList();
-        int score = 0;
-        int first = 0;
-        em.getTransaction().begin();
-        for(Candidate candidate : candidates){
-
-             for(CandidateVote candidateVote : candidateVotes){
-                 if(candidateVote.getCandidate() == candidate){
-                     score = score + candidateVote.getScore();
-                     first = first + candidateVote.getFirst();
-                 }
-             }
-             candidate.setVotes(score);
-             candidate.setFirst(first);
-             em.merge(candidate);
-        }
-        em.getTransaction().commit();
-
-    }
-
 
    /* public String changereturningofficer(String username_old, String password_old, String username_new, String password_new) {
         ReturningOfficer rsold = new ReturningOfficer(1, password_old, username_old);

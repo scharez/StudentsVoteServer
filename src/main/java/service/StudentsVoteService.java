@@ -11,8 +11,6 @@ import java.io.File;
 @Path("sv")
 public class StudentsVoteService {
 
-
-
     @Path("message")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -49,9 +47,6 @@ public class StudentsVoteService {
         return Repository.getInstance().getCandidate(true);
     }
 
-
-
-
     /*@Path("changereturningofficer")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -62,8 +57,6 @@ public class StudentsVoteService {
                            @QueryParam("password_new") String password_new){
         return Repository.getInstance().changereturningofficer(username_old, password_old, username_new, password_new);
     }*/
-
-
 
     @Path("setCandidate")
     @POST
@@ -81,24 +74,12 @@ public class StudentsVoteService {
         return "got it";
     }*/
 
-    @Path("endelection")
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String endelection(){
-
-        Repository.getInstance().endelection();
-
-        return "this is the real end!";
-    }
-
-
     @Path("test")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String test(){
         return "lol";
     }
-
 
     @Path("instanceCVs")
     @POST
