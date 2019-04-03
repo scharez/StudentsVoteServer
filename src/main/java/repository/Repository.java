@@ -10,6 +10,7 @@ import ldapuser.LdapException;
 import ldapuser.LdapUser;
 import org.json.JSONObject;
 import utils.CustomException;
+import utils.Point;
 import utils.Role;
 import utils.User;
 
@@ -25,11 +26,8 @@ public class Repository {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("studentsVotePU");
     private EntityManager em = emf.createEntityManager();
 
-    //
     private List<CandidateVote> cvs = new ArrayList<>();
     private final List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c").getResultList();
-    //private int candidateCounter = 0;
-    //
 
     private static Repository instance;
 
@@ -112,54 +110,6 @@ public class Repository {
         return "Candidate set.";
     }
 
-    /*
-    public String getCandidate2(boolean full) {
-
-
-        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
-        if(full){
-            return jsonCandidate(candidates);
-        } else {
-            return jsonfullCandidate(candidates);
-        }
-    }
-
-    private String jsonfullCandidate(List<Candidate> candidates) {
-
-        JSONObject jsonC = new JSONObject();
-        int i = 0;
-
-        for(Candidate candidate : candidates){
-            System.out.println(candidate.getFirstname());
-            jsonC.put("can" + i + "_username", candidate.getUsername())
-                    .put("can" + i + "_firstname", candidate.getFirstname())
-                    .put("can" + i + "_lastname", candidate.getLastname())
-                    .put("can" + i + "_zweig", candidate.getAbteilung())
-                    .put("can" + i + "_klasse", candidate.getCandidateClass())
-                    .put("can" + i + "_wahlversprechen", candidate.getElectionPromise())
-                    .put("can" + i + "_bild", candidate.getPicture());
-            i++;
-        }
-        i = 0;
-        return jsonC.toString();
-    }
-
-    private String jsonCandidate(List<Candidate> candidates) {
-
-        JSONObject jsonC = new JSONObject();
-        int i = 0;
-
-        for(Candidate candidate : candidates){
-            System.out.println(candidate.getFirstname());
-            jsonC.put("can" + i + "_username", candidate.getUsername())
-                    .put("can" + i + "_firstname", candidate.getFirstname())
-                    .put("can" + i + "_lastname", candidate.getLastname());
-            i++;
-        }
-        return jsonC.toString();
-    }
-    */
-
     public List<Candidate> getCandidates() {
         return em.createQuery("SELECT c FROM Candidate c").getResultList();
     }
@@ -174,23 +124,36 @@ public class Repository {
         return "CVs created.";
     }
 
+    public String parseJson(Point[] points) {
+        for(int i = 0; i < points.length; i++) {
+            for(CandidateVote cv : cvs) {
+                if(cv.getCandidate().getUsername().equals(points[i].getId())) {
+                    cv.setScore(cv.getScore() + points[i].getScore());
+                    if((cv.getCandidate().getPosition().equals("s") && points[i].getScore() == 6) || (cv.getCandidate().getPosition().equals("a") && points[i].getScore() == 2)) {
+                        cv.setFirst(cv.getFirst() + 1);
+                    }
+                }
+            }
+        }
+        return "Points added.";
+    }
+
+    /*
     public String parseJson(String json) {
         JSONObject singleVote = new JSONObject(json);
-
         String username = singleVote.getString("id");
         int score = singleVote.getInt("score");
-
         for(CandidateVote cv : cvs) {
             if(cv.getCandidate().getUsername().equals(username)) {
                 cv.setScore(cv.getScore() + score);
-                if((cv.getCandidate().getPosition().equals("idS") && score == 6) || (cv.getCandidate().getPosition().equals("idA") && score == 2)) {
+                if((cv.getCandidate().getPosition().equals("s") && score == 6) || (cv.getCandidate().getPosition().equals("a") && score == 2)) {
                     cv.setFirst(cv.getFirst() + 1);
                 }
             }
         }
-
         return score + " Points added to candidate " + username;
     }
+    */
 
     public String persistCVs() {
         em.getTransaction().begin();
@@ -198,7 +161,6 @@ public class Repository {
             em.persist(cv);
         }
         em.getTransaction().commit();
-        this.cvs.clear();
         return "CVs comitted.";
     }
 
@@ -234,4 +196,5 @@ public class Repository {
         em.getTransaction().commit();
         return "wrong Returning Officer";
     } */
+
 }

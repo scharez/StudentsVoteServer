@@ -2,6 +2,7 @@ package service;
 
 import entity.Candidate;
 import repository.Repository;
+import utils.Point;
 import utils.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -83,6 +84,7 @@ public class StudentsVoteService {
         return "lol";
     }
 
+
     //Aufruf: Am Beginn der Wahl in einer Klasse
     //Funktion: Die teporär gespeicherten CVs werden gelöcht. Dann wird für jeden Candidate ein CV angelegt
     @Path("instanceCVs")
@@ -94,13 +96,13 @@ public class StudentsVoteService {
     }
 
     //Aufruf: Nach dem Eintragen eines einzelnen Stimmzettels
-    //Funktion: Die Punkte eines einzelnen Candidates wird im entsprechenden CV hinzugefügt
+    //Funktion: Der Array von Points wird übergeben und der score wird in das entsprechende CV eingetragen
     @Path("parseJson")
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String parseJson(String json) {
-        System.out.println("Points added. " + json);
-        return Repository.getInstance().parseJson(json);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String parseJson(Point[] points) {
+        System.out.println("Points added.");
+        return Repository.getInstance().parseJson(points);
     }
 
     //Aufruf: Nach dem Abschluss einer Wahl in einer einzelnen Klasse
