@@ -1,6 +1,7 @@
 package service;
 
 import entity.Candidate;
+import org.json.JSONObject;
 import repository.Repository;
 import utils.Point;
 import utils.User;
@@ -9,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 import java.io.File;
 import java.util.List;
+import java.util.jar.JarEntry;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -112,6 +114,13 @@ public class StudentsVoteService {
     public String persistCVs() {
         System.out.println("CVs persisted");
         return Repository.getInstance().persistCVs();
+    }
+
+    @Path("getCVs")
+    @POST
+    public JSONObject[] getCVs() {
+        System.out.println("Got CVs");
+        return Repository.getInstance().getCVs();
     }
 
     //Aufruf: Nachdem die Wahlen in allen Klassen abgeschlossen sind
