@@ -118,7 +118,8 @@ public class StudentsVoteService {
 
     @Path("getCVs")
     @POST
-    public JSONObject[] getCVs() {
+
+    public String getCVs() {
         System.out.println("Got CVs");
         return Repository.getInstance().getCVs();
     }

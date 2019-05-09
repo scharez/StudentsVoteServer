@@ -8,7 +8,6 @@ import entity.ReturningOfficer;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.CustomException;
 import utils.Point;
@@ -149,11 +148,14 @@ public class Repository {
         return "CVs comitted.";
     }
 
-    /*
-    public JSONObject[] getCVs() {
+    // Nachdem der Wahlleiter die Diagramme neu lädt
+    public String getCVs() {
 
-        //JSONObject[] toReturn = new JSONObject[5];
-        JSONArray toReturn = new JSONArray();
+        List<JSONObject> toReturn = new ArrayList<>();
+
+        for(int i = 0; i < 5; i++) {
+            toReturn.add(i, new JSONObject());
+        }
 
         for(Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
             for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
@@ -161,24 +163,21 @@ public class Repository {
                     result.setScore(result.getScore() + candidateVote.getScore());
                     result.setFirst(result.getFirst() + candidateVote.getFirst());
                 }
-                if(toReturn.get(4) == null) {
-                   // toReturn[4].put(candidateVote.getSchoolClass(), 0);
-                } else if(!toReturn.getJSONObject(4).has(candidateVote.getSchoolClass())) {
-                    toReturn[4].put(candidateVote.getSchoolClass(), 0);
+                if(!toReturn.get(4).has(candidateVote.getSchoolClass())) {
+                    toReturn.get(4).put(candidateVote.getSchoolClass(), 0);
                 }
             }
             if(result.getCandidate().getPosition().equals("s")) {
-                toReturn[0].put(result.getCandidate().getLastname(), result.getScore());
-                toReturn[1].put(result.getCandidate().getLastname(), result.getFirst());
+                toReturn.get(0).put(result.getCandidate().getLastname(), result.getScore());
+                toReturn.get(1).put(result.getCandidate().getLastname(), result.getFirst());
             } else {
-                toReturn[2].put(result.getCandidate().getLastname(), result.getScore());
-                toReturn[3].put(result.getCandidate().getLastname(), result.getFirst());
+                toReturn.get(2).put(result.getCandidate().getLastname(), result.getScore());
+                toReturn.get(3).put(result.getCandidate().getLastname(), result.getFirst());
             }
         }
 
-        return toReturn;
+        return toReturn.toString();
     }
-    */
 
     /*public String[] getCVs() {
 
