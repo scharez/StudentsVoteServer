@@ -1,10 +1,7 @@
 package repository;
 
-import entity.Result;
-import entity.CandidateVote;
+import entity.*;
 import jwt.JwtBuilder;
-import entity.Candidate;
-import entity.ReturningOfficer;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
@@ -61,7 +58,11 @@ public class Repository {
             if(isReturningOfficer(user.getUsername())){
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, sometoken);
             } else {
-                return jsonLoginBuilder(user.getUsername(), Role.Teacher, sometoken);
+                if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isHasEnded()) {
+                    return jsonLoginBuilder(user.getUsername(), Role.Students, sometoken);
+                } else {
+                    return jsonLoginBuilder(user.getUsername(), Role.Teacher, sometoken);
+                }
             }
         } else {
             sometoken = new JwtBuilder().create(user.getUsername());
