@@ -148,7 +148,7 @@ public class Repository {
         return "CVs comitted.";
     }
 
-    // Nachdem der Wahlleiter die Diagramme neu lädt
+    // Nachdem der Wahlleiter die Diagramme lädt
     public String getCVs() {
 
         List<JSONObject> toReturn = new ArrayList<>();
@@ -158,6 +158,8 @@ public class Repository {
         }
 
         for(Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
+            result.setScore(0);
+            result.setFirst(0);
             for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
                 if(result.getCandidate().equals(candidateVote.getCandidate())) {
                     result.setScore(result.getScore() + candidateVote.getScore());
@@ -179,59 +181,6 @@ public class Repository {
         return toReturn.toString();
     }
 
-    /*public String[] getCVs() {
-
-        String[] toReturn = new String[5];
-        List<String> classes = new ArrayList<>();
-
-        for(int i = 0; i < toReturn.length; i++) {
-            toReturn[i] = "{";
-        }
-
-        List<Result> results = em.createQuery("SELECT r FROM Result r", Result.class).getResultList();
-        for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-            for(Result result : results) {
-                if(result.getCandidate().equals(candidateVote.getCandidate())) {
-                    result.setScore(result.getScore() + candidateVote.getScore());
-                    result.setFirst(result.getFirst() + candidateVote.getFirst());
-                }
-
-            }
-            if(!classes.contains(candidateVote.getSchoolClass())) {
-                classes.add(candidateVote.getSchoolClass());
-            }
-        }
-
-        for(Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
-            for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-                if(result.getCandidate().equals(candidateVote.getCandidate())) {
-                    result.setScore(result.getScore() + candidateVote.getScore());
-                    result.setFirst(result.getFirst() + candidateVote.getFirst());
-                }
-                if(!classes.contains(candidateVote.getSchoolClass())) {
-                    classes.add(candidateVote.getSchoolClass());
-                    toReturn[5] += candidateVote.getSchoolClass() + ", ";
-                }
-            }
-            if(result.getCandidate().getPosition().equals("s")) {
-                //JSONObject obj = new JSONObject(result.getCandidate());
-                toReturn[0] += ("\"" + result.getCandidate().getLastname() + "\"" + ":" + result.getScore() + ", ");
-                toReturn[1] += ("\"" + result.getCandidate().getLastname() + "\"" + ":" + result.getFirst()) + ", ";
-            } else {
-                toReturn[2] += ("\"" + result.getCandidate().getLastname() + "\"" + ":" + result.getScore() + ", ");
-                toReturn[3] += ("\"" + result.getCandidate().getLastname() + "\"" + ":" + result.getFirst()) + ", ";
-            }
-        }
-
-        for(int i = 0; i < toReturn.length; i++) {
-            if(toReturn[i].length() >= 2) {
-                toReturn[i] = toReturn[i].substring(0, toReturn[i].length() - 2);
-            }
-            toReturn[i] += "}";
-        }
-        return toReturn;
-    }*/
-
     // Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
     public String deleteCvs(String schoolClass) {
         for(CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
@@ -247,9 +196,11 @@ public class Repository {
         List<CandidateVote> candidateVotes = em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList();
         List<Result> results = em.createQuery("SELECT r FROM Result r", Result.class).getResultList();
         em.getTransaction().begin();
-        for(CandidateVote candidateVote : candidateVotes) {
-            for(Result result : results) {
-                if(candidateVote.getCandidate().equals(result.getCandidate())) {
+        for(Result result : results) {
+            result.setScore(0);
+            result.setFirst(0);
+            for(CandidateVote candidateVote : candidateVotes) {
+                if(result.getCandidate().equals(candidateVote.getCandidate())) {
                     result.setScore(result.getScore() + candidateVote.getScore());
                     result.setFirst(result.getFirst() + candidateVote.getFirst());
                     em.merge(result);

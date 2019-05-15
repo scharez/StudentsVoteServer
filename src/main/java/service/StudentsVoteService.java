@@ -108,7 +108,7 @@ public class StudentsVoteService {
     }
 
     //Aufruf: Nach dem Abschluss einer Wahl in einer einzelnen Klasse
-    // Funktion: Persistiert alle temporär gespeicherten CVs und löscht sie danach
+    //Funktion: Persistiert alle temporär gespeicherten CVs und löscht sie danach
     @Path("persistCVs")
     @POST
     public String persistCVs() {
@@ -118,7 +118,6 @@ public class StudentsVoteService {
 
     @Path("getCVs")
     @POST
-
     public String getCVs() {
         System.out.println("Got CVs");
         return Repository.getInstance().getCVs();
