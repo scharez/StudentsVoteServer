@@ -1,11 +1,14 @@
 package repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.*;
 import jwt.JwtBuilder;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
 import org.json.JSONObject;
+import org.json.JSONString;
 import utils.CustomException;
 import utils.Point;
 import utils.Role;
@@ -32,7 +35,6 @@ public class Repository {
         }
         return instance;
     }
-
 
     public String loginCheck(User user) {
         CustomException ce = new CustomException();
@@ -104,8 +106,18 @@ public class Repository {
      *
      * @return a List of all Candidates
      */
-    public List<Candidate> getCandidates() {
-        return em.createQuery("SELECT c FROM Candidate c").getResultList();
+    public String getCandidates() {
+        //return em.createQuery("SELECT c FROM Candidate c").getResultList().toString();
+        String candidates = "[";
+        for(Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                candidates += mapper.writeValueAsString(candidate) + ",";
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        return candidates.substring(0, candidates.length() - 1) + "]";
     }
 
     // Nachdem der Lehrer die Klasse angegeben hat || Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
@@ -200,8 +212,10 @@ public class Repository {
      * @param schoolClass String of the SchoolClass's name who's Results must be removed
      * @return a String
      */
-    public String deleteCvs(String schoolClass) {
+    public String deleteCVs(String schoolClass) {
+        System.out.println(em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList().size());
         for(CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
+            System.out.println(cv.getCandidate().getId());
             em.getTransaction().begin();
             em.remove(cv);
             em.getTransaction().commit();

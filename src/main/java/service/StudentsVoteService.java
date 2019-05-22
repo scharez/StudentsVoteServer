@@ -36,8 +36,7 @@ public class StudentsVoteService {
     @Path("getCandidates")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Candidate> getCandidates(){
+    public String getCandidates(){
         return Repository.getInstance().getCandidates();
     }
 
@@ -109,6 +108,21 @@ public class StudentsVoteService {
     public String getCVs() {
         System.out.println("Got CVs");
         return Repository.getInstance().getCVs();
+    }
+
+    // Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
+    /**
+     * Delete previously persisted CVs
+     *
+     * @param schoolClass String of the SchoolClass's name who's Results must be removed
+     * @return a String
+     */
+    @Path("deleteCVs")
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String deleteCVs(String schoolClass) {
+        System.out.println("CVs deleted.");
+        return Repository.getInstance().deleteCVs(schoolClass);
     }
 
     // Nachdem der Wahlleiter die Wahl für alle beendet
