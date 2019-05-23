@@ -31,7 +31,7 @@ public class StudentsVoteService {
     /**
      * Returns all Candidates
      *
-     * @return a List of all Candidates
+     * @return a stringyfied List of all Candidates
      */
     @Path("getCandidates")
     @GET
