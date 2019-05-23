@@ -7,6 +7,7 @@ import jwt.JwtBuilder;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
 import ldapuser.LdapUser;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
 import utils.CustomException;
@@ -74,7 +75,6 @@ public class Repository {
             .put("username", username)
             .put("role", role)
             .put("token", token);
-        System.out.println(user.toString());
         return user.toString();
     }
 
@@ -98,26 +98,16 @@ public class Repository {
         em.persist(candidate);
         em.persist(new Result(candidate));
         em.getTransaction().commit();
-        return "Candidate set.";
+        return "{\"response\":\"Candidate set.\"";
     }
 
     /**
      * Returns all Candidates
      *
-     * @return a List of all Candidates
+     * @return a stringyfied JSON of all Candidates
      */
     public String getCandidates() {
-        //return em.createQuery("SELECT c FROM Candidate c").getResultList().toString();
-        String candidates = "[";
-        for(Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                candidates += mapper.writeValueAsString(candidate) + ",";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-        return candidates.substring(0, candidates.length() - 1) + "]";
+        return new JSONArray(em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()).toString();
     }
 
     // Nachdem der Lehrer die Klasse angegeben hat || Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
@@ -132,7 +122,7 @@ public class Repository {
         for(Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
             cvs.add(new CandidateVote(candidate, schoolClass));
         }
-        return "CVs created.";
+        return "{\"response\":\"CVs created.\"";
     }
 
     // Nachdem der Lehrer einen einzelnen Zettel bestätigt
@@ -153,7 +143,7 @@ public class Repository {
                 }
             }
         }
-        return "Points added.";
+        return "{\"response\":\"Points added.\"";
     }
 
     // Nachdem der Lehrer die Wahl in einer Klasse beendet || Nachdem der Wahlleiter den Nachtrag einer Klasse beendet
@@ -168,7 +158,7 @@ public class Repository {
             em.persist(cv);
         }
         em.getTransaction().commit();
-        return "CVs comitted.";
+        return "{\"response\":\"CVs comitted.\"";
     }
 
     // Nachdem der Wahlleiter die Diagramme lädt
@@ -213,14 +203,12 @@ public class Repository {
      * @return a String
      */
     public String deleteCVs(String schoolClass) {
-        System.out.println(em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList().size());
         for(CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
-            System.out.println(cv.getCandidate().getId());
             em.getTransaction().begin();
             em.remove(cv);
             em.getTransaction().commit();
         }
-        return "All entries from class " + schoolClass + " deleted.";
+        return "{\"response\":\"All entries from class " + schoolClass + " deleted.\"";
     }
 
     // Nachdem der Wahlleiter die Wahl für alle beendet
@@ -243,7 +231,7 @@ public class Repository {
             }
         }
         em.getTransaction().commit();
-        return "Results commited.";
+        return "{\"response\":\"Results commited.\"";
     }
 
 }
