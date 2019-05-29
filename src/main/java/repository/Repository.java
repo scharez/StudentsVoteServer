@@ -55,10 +55,10 @@ public class Repository {
             } else {
                 if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
                     if(!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
-                        return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+                        return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
                     }
                 }
-                return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
+                return jsonLoginBuilder(user.getUsername(), Role.Students, token);
             }
         } else {
             token = new JwtBuilder().create(user.getUsername());
@@ -134,7 +134,7 @@ public class Repository {
      * @return a String
      */
     public String parseJson(Point[] points) {
-        if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
+        if(!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
             for (int i = 0; i < points.length; i++) {
                 for (CandidateVote cv : cvs) {
                     if (cv.getCandidate().getUsername().equals(points[i].getId())) {
@@ -241,6 +241,12 @@ public class Repository {
         return "{\"response\":\"Results commited.\"";
     }
 
+    // Nachdem der Wahlleiter die Wahl startet
+    /**
+     * Starts the election, makes Teacher able to log in
+     *
+     * @return a String
+     */
     public String startElection() {
         em.getTransaction().begin();
         ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
@@ -250,6 +256,12 @@ public class Repository {
         return "{\"response\":\"Election started.\"";
     }
 
+    // Nachdem der Wahlleiter die Wahl für die Lehrer beendet
+    /**
+     * End the election for the Teacher, makes them unable to log in
+     *
+     * @return a String
+     */
     public String endElectionTeacher() {
         em.getTransaction().begin();
         ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
