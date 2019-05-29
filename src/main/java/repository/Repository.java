@@ -53,11 +53,12 @@ public class Repository {
             if(isReturningOfficer(user.getUsername())){
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
             } else {
-                if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isHasEnded()) {
-                    return jsonLoginBuilder(user.getUsername(), Role.Students, token);
-                } else {
-                    return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
+                if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
+                    if(!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
+                        return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+                    }
                 }
+                return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
             }
         } else {
             token = new JwtBuilder().create(user.getUsername());
@@ -133,17 +134,20 @@ public class Repository {
      * @return a String
      */
     public String parseJson(Point[] points) {
-        for(int i = 0; i < points.length; i++) {
-            for(CandidateVote cv : cvs) {
-                if(cv.getCandidate().getUsername().equals(points[i].getId())) {
-                    cv.setScore(cv.getScore() + points[i].getScore());
-                    if((cv.getCandidate().getPosition().equals("s") && points[i].getScore() == 6) || (cv.getCandidate().getPosition().equals("a") && points[i].getScore() == 2)) {
-                        cv.setFirst(cv.getFirst() + 1);
+        if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
+            for (int i = 0; i < points.length; i++) {
+                for (CandidateVote cv : cvs) {
+                    if (cv.getCandidate().getUsername().equals(points[i].getId())) {
+                        cv.setScore(cv.getScore() + points[i].getScore());
+                        if ((cv.getCandidate().getPosition().equals("s") && points[i].getScore() == 6) || (cv.getCandidate().getPosition().equals("a") && points[i].getScore() == 2)) {
+                            cv.setFirst(cv.getFirst() + 1);
+                        }
                     }
                 }
             }
+            return "{\"response\":\"Points added.\"}";
         }
-        return "{\"response\":\"Points added.\"";
+        return "{\"response\":\"Election already ended.\"}";
     }
 
     // Nachdem der Lehrer die Wahl in einer Klasse beendet || Nachdem der Wahlleiter den Nachtrag einer Klasse beendet
@@ -230,8 +234,29 @@ public class Repository {
                 }
             }
         }
+        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
+        es.setEndedCompletely(true);
+        em.merge(es);
         em.getTransaction().commit();
         return "{\"response\":\"Results commited.\"";
+    }
+
+    public String startElection() {
+        em.getTransaction().begin();
+        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
+        es.setStarted(true);
+        em.merge(es);
+        em.getTransaction().commit();
+        return "{\"response\":\"Election started.\"";
+    }
+
+    public String endElectionTeacher() {
+        em.getTransaction().begin();
+        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
+        es.setEnded(true);
+        em.merge(es);
+        em.getTransaction().commit();
+        return "{\"response\":\"Election for Teacher ended.\"";
     }
 
 }

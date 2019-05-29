@@ -138,6 +138,20 @@ public class StudentsVoteService {
         return Repository.getInstance().endElection();
     }
 
+    @Path("startElection")
+    @POST
+    public String startElection() {
+        System.out.println("Election started.");
+        return Repository.getInstance().startElection();
+    }
+
+    @Path("endElectionTeacher")
+    @POST
+    public String endElectionTeacher() {
+        System.out.println("Election for Teacher ended.");
+        return Repository.getInstance().endElectionTeacher();
+    }
+
     /*@Path("gimmeimage/{id}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
