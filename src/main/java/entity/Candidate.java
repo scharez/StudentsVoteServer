@@ -9,10 +9,8 @@ import java.util.*;
 public class Candidate implements Serializable {
 
     @Id
-    @GeneratedValue
-    private int     id;
-
     private String  username;
+
     private String  firstname;
     private String  lastname;
     private String  candidateClass;
@@ -35,14 +33,6 @@ public class Candidate implements Serializable {
         this.picture = picture;
         this.electionPromise = electionPromise;
         this.position = position;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {
