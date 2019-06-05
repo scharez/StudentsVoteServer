@@ -50,6 +50,7 @@ public class StudentsVoteService {
     @Path("setCandidate")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String setCandidate(Candidate candidate){
         return Repository.getInstance().setCandidate(candidate);
     }
