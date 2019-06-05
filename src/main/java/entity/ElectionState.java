@@ -9,10 +9,14 @@ public class ElectionState {
     @GeneratedValue
     private int     id;
 
-    private boolean hasEnded;
+    private boolean started;
+    private boolean ended;
+    public boolean  endedCompletely;
 
     public ElectionState() {
-        this.hasEnded = false;
+        this.started = false;
+        this.ended = false;
+        this.endedCompletely = false;
     }
 
     public int getId() {
@@ -23,12 +27,28 @@ public class ElectionState {
         this.id = id;
     }
 
-    public boolean isHasEnded() {
-        return hasEnded;
+    public boolean isStarted() {
+        return started;
     }
 
-    public void setHasEnded(boolean hasEnded) {
-        this.hasEnded = hasEnded;
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void setEnded(boolean ended) {
+        this.ended = ended;
+    }
+
+    public boolean isEndedCompletely() {
+        return endedCompletely;
+    }
+
+    public void setEndedCompletely(boolean endedCompletely) {
+        this.endedCompletely = endedCompletely;
     }
 
 }
