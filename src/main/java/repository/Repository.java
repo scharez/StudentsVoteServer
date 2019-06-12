@@ -14,6 +14,7 @@ import utils.CustomException;
 import utils.Point;
 import utils.Role;
 import utils.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -43,18 +44,18 @@ public class Repository {
         try {
             lu = new LdapUser(user.getUsername(), user.getPassword().toCharArray());
         } catch (LdapException e) {
-             return ce.buildException(503, "Service Unavailable", "LDAP not working");
+            return ce.buildException(503, "Service Unavailable", "LDAP not working");
         } catch (LdapAuthException e) {
             return ce.buildException(401, "Unauthorized", "Login Error");
         }
         String token;
-        if(lu.isTeacher()){
+        if (lu.isTeacher()) {
             token = new JwtBuilder().create(user.getUsername());
-            if(isReturningOfficer(user.getUsername())){
+            if (isReturningOfficer(user.getUsername())) {
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
             } else {
-                if(em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
-                    if(!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
+                if (em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
+                    if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
                         return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
                     }
                 }
@@ -62,7 +63,7 @@ public class Repository {
             }
         } else {
             token = new JwtBuilder().create(user.getUsername());
-            if(isCandidate(user.getUsername())){
+            if (isCandidate(user.getUsername())) {
                 return jsonLoginBuilder(user.getUsername(), Role.Candidates, token);
             } else {
                 return jsonLoginBuilder(user.getUsername(), Role.Students, token);
@@ -73,9 +74,9 @@ public class Repository {
     private String jsonLoginBuilder(String username, Role role, String token) {
         JSONObject user = new JSONObject();
         user
-            .put("username", username)
-            .put("role", role)
-            .put("token", token);
+                .put("username", username)
+                .put("role", role)
+                .put("token", token);
         return user.toString();
     }
 
@@ -88,6 +89,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter einen Kandidaten eingetragen hat
+
     /**
      * Persists a new Candidate and creates the corresponding Result
      *
@@ -95,6 +97,12 @@ public class Repository {
      * @return a String
      */
     public String setCandidate(Candidate candidate) {
+        List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
+        for (Candidate c : candidates) {
+            if (candidate.getUsername().equals(c.getUsername())) {
+                return "{\"response\":\"Failed: Candidate already inserted.\"";
+            }
+        }
         em.getTransaction().begin();
         em.persist(candidate);
         em.persist(new Result(candidate));
@@ -112,6 +120,7 @@ public class Repository {
     }
 
     // Nachdem der Lehrer die Klasse angegeben hat || Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
+
     /**
      * Creates and temporarily saves a CV in a SchoolClass for each Candidate
      *
@@ -120,13 +129,14 @@ public class Repository {
      */
     public String instanceCVs(String schoolClass) {
         this.cvs.clear();
-        for(Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
+        for (Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
             cvs.add(new CandidateVote(candidate, schoolClass));
         }
         return "{\"response\":\"CVs created.\"";
     }
 
     // Nachdem der Lehrer einen einzelnen Zettel bestätigt
+
     /**
      * Temporarily saves the Points from a single voting paper
      *
@@ -134,7 +144,7 @@ public class Repository {
      * @return a String
      */
     public String parseJson(Point[] points) {
-        if(!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
+        if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
             for (int i = 0; i < points.length; i++) {
                 for (CandidateVote cv : cvs) {
                     if (cv.getCandidate().getUsername().equals(points[i].getId())) {
@@ -151,6 +161,7 @@ public class Repository {
     }
 
     // Nachdem der Lehrer die Wahl in einer Klasse beendet || Nachdem der Wahlleiter den Nachtrag einer Klasse beendet
+
     /**
      * Persist the CVs of a SchoolClass
      *
@@ -158,7 +169,7 @@ public class Repository {
      */
     public String persistCVs() {
         em.getTransaction().begin();
-        for(CandidateVote cv : cvs) {
+        for (CandidateVote cv : cvs) {
             em.persist(cv);
         }
         em.getTransaction().commit();
@@ -166,6 +177,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter die Diagramme lädt
+
     /**
      * Return current Results and SchoolClasses that already voted
      *
@@ -173,22 +185,22 @@ public class Repository {
      */
     public String getCVs() {
         List<JSONObject> toReturn = new ArrayList<>();
-        for(int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             toReturn.add(i, new JSONObject());
         }
-        for(Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
+        for (Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
             result.setScore(0);
             result.setFirst(0);
-            for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-                if(result.getCandidate().equals(candidateVote.getCandidate())) {
+            for (CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
+                if (result.getCandidate().equals(candidateVote.getCandidate())) {
                     result.setScore(result.getScore() + candidateVote.getScore());
                     result.setFirst(result.getFirst() + candidateVote.getFirst());
                 }
-                if(!toReturn.get(4).has(candidateVote.getSchoolClass())) {
+                if (!toReturn.get(4).has(candidateVote.getSchoolClass())) {
                     toReturn.get(4).put(candidateVote.getSchoolClass(), 0);
                 }
             }
-            if(result.getCandidate().getPosition().equals("s")) {
+            if (result.getCandidate().getPosition().equals("s")) {
                 toReturn.get(0).put(result.getCandidate().getLastname(), result.getScore());
                 toReturn.get(1).put(result.getCandidate().getLastname(), result.getFirst());
             } else {
@@ -200,6 +212,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
+
     /**
      * Delete previously persisted CVs
      *
@@ -207,7 +220,7 @@ public class Repository {
      * @return a String
      */
     public String deleteCVs(String schoolClass) {
-        for(CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
+        for (CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
             em.getTransaction().begin();
             em.remove(cv);
             em.getTransaction().commit();
@@ -216,6 +229,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter die Wahl für alle beendet
+
     /**
      * End the election, calculate and persist the result
      *
@@ -223,11 +237,11 @@ public class Repository {
      */
     public String endElection() {
         em.getTransaction().begin();
-        for(Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
+        for (Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
             result.setScore(0);
             result.setFirst(0);
-            for(CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-                if(result.getCandidate().equals(candidateVote.getCandidate())) {
+            for (CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
+                if (result.getCandidate().equals(candidateVote.getCandidate())) {
                     result.setScore(result.getScore() + candidateVote.getScore());
                     result.setFirst(result.getFirst() + candidateVote.getFirst());
                     em.merge(result);
@@ -242,6 +256,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter die Wahl startet
+
     /**
      * Starts the election, makes Teacher able to log in
      *
@@ -257,6 +272,7 @@ public class Repository {
     }
 
     // Nachdem der Wahlleiter die Wahl für die Lehrer beendet
+
     /**
      * End the election for the Teacher, makes them unable to log in
      *
