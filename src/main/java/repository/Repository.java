@@ -54,12 +54,17 @@ public class Repository {
             if (isReturningOfficer(user.getUsername())) {
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
             } else {
-                if (em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
-                    if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
-                        return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
+                try {
+                    if (em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
+                        if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
+                            return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
+                        }
                     }
+                    return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+
+                } catch(Exception e){
+                    return jsonLoginBuilder(user.getUsername(), Role.Students, token);
                 }
-                return jsonLoginBuilder(user.getUsername(), Role.Students, token);
             }
         } else {
             token = new JwtBuilder().create(user.getUsername());
@@ -81,11 +86,19 @@ public class Repository {
     }
 
     private boolean isCandidate(String username) {
-        return !em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class).setParameter("username", username).getSingleResult().equals(null);
+        try {
+            return !em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class).setParameter("username", username).getSingleResult().equals(null);
+        }catch(Exception e){
+            return false;
+        }
     }
 
     private boolean isReturningOfficer(String username) {
-        return !em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getSingleResult().equals(null);
+        try {
+            return !em.createQuery("SELECT rs FROM ReturningOfficer rs WHERE rs.username = :username", ReturningOfficer.class).setParameter("username", username).getSingleResult().equals(null);
+        } catch(Exception e){
+            return false;
+        }
     }
 
     // Nachdem der Wahlleiter einen Kandidaten eingetragen hat
