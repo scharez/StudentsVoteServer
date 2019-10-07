@@ -152,12 +152,7 @@ public class StudentsVoteService {
         return Repository.getInstance().startElection();
     }
 
-    // Nachdem der Wahlleiter die Wahl für die Lehrer beendet
-    /**
-     * End the election for the Teacher, makes them unable to log in
-     *
-     * @return a String
-     */
+
     @Path("endElectionTeacher")
     @POST
     public String endElectionTeacher() {

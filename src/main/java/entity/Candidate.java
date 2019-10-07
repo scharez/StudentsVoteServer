@@ -9,22 +9,30 @@ import java.util.*;
 public class Candidate implements Serializable {
 
     @Id
-    private String  username;
+    @GeneratedValue
+    private int     id;
 
+    private String  username;
     private String  firstname;
     private String  lastname;
-    private String  candidateClass;
+
+    @ManyToOne
+    private SchoolClass  candidateClass;
+
     private String  department;
     private File    picture;
     private String  electionPromise;
     private String  position;
+
+    private int     score;
+    private int     first;
 
     @OneToMany
     private List<CandidateVote> candicateVotes;
 
     public Candidate() {}
 
-    public Candidate(String username, String firstname, String lastname, String candidateClass, String department, File picture, String electionPromise, String position) {
+    public Candidate(String username, String firstname, String lastname, SchoolClass candidateClass, String department, File picture, String electionPromise, String position) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -33,6 +41,14 @@ public class Candidate implements Serializable {
         this.picture = picture;
         this.electionPromise = electionPromise;
         this.position = position;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -59,11 +75,11 @@ public class Candidate implements Serializable {
         this.lastname = lastname;
     }
 
-    public String getCandidateClass() {
+    public SchoolClass getCandidateClass() {
         return candidateClass;
     }
 
-    public void setCandidateClass(String candidateClass) {
+    public void setCandidateClass(SchoolClass candidateClass) {
         this.candidateClass = candidateClass;
     }
 
@@ -105,6 +121,22 @@ public class Candidate implements Serializable {
 
     public void setCandicateVotes(List<CandidateVote> candicateVotes) {
         this.candicateVotes = candicateVotes;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public void setFirst(int first) {
+        this.first = first;
     }
 
 }
