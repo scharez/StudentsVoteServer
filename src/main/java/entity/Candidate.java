@@ -16,7 +16,7 @@ public class Candidate implements Serializable {
     private String  firstname;
     private String  lastname;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private SchoolClass  candidateClass;
 
     private String  department;
@@ -41,6 +41,8 @@ public class Candidate implements Serializable {
         this.picture = picture;
         this.electionPromise = electionPromise;
         this.position = position;
+        this.score = 0;
+        this.first = 0;
     }
 
     public int getId() {

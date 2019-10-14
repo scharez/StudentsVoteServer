@@ -14,11 +14,13 @@ public class CandidateVote {
 
     private int         score;
     private int         first;
-    private String      schoolClass;
+
+    @ManyToOne
+    private SchoolClass schoolClass;
 
     public CandidateVote() {}
 
-    public CandidateVote(Candidate candidate, String schoolClass) {
+    public CandidateVote(Candidate candidate, SchoolClass schoolClass) {
         this.candidate = candidate;
         this.score = 0;
         this.first = 0;
@@ -57,11 +59,11 @@ public class CandidateVote {
         this.first = first;
     }
 
-    public String getSchoolClass() {
+    public SchoolClass getSchoolClass() {
         return schoolClass;
     }
 
-    public void setSchoolClass(String schoolClass) {
+    public void setSchoolClass(SchoolClass schoolClass) {
         this.schoolClass = schoolClass;
     }
 

@@ -12,6 +12,7 @@ public class Election {
     @GeneratedValue
     private int     id;
 
+    @Temporal(TemporalType.DATE)
     private Date    date;
     private int     electionState; // 2 = running, 1 = ended for teachers, 0 = ended completely
 

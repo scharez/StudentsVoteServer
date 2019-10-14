@@ -52,6 +52,7 @@ public class StudentsVoteService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String setCandidate(Candidate candidate){
+        System.out.println("pls send help");
         return Repository.getInstance().setCandidate(candidate);
     }
 
@@ -151,7 +152,6 @@ public class StudentsVoteService {
         System.out.println("Election started.");
         return Repository.getInstance().startElection();
     }
-
 
     @Path("endElectionTeacher")
     @POST

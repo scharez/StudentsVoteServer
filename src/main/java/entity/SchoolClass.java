@@ -7,14 +7,16 @@ public class SchoolClass {
 
     @Id
     @GeneratedValue
-    private int id;
+    private int     id;
 
-    private String name;
+    private String  name;
+    private boolean hasVoted;
 
     public SchoolClass() {}
 
     public SchoolClass(String name) {
         this.name = name;
+        this.hasVoted = false;
     }
 
     public int getId() {
@@ -31,6 +33,14 @@ public class SchoolClass {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean getHasVoted() {
+        return hasVoted;
+    }
+
+    public void setHasVoted(boolean hasVorted) {
+        this.hasVoted = hasVorted;
     }
 
 }

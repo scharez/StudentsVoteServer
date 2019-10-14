@@ -55,13 +55,12 @@ public class Repository {
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
             } else {
                 try {
-                    if (em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isStarted()) {
-                        if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEnded()) {
+                    Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+                    if (e.getElectionState() == 2) {
                             return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
-                        }
+                    } else {
+                        return jsonLoginBuilder(user.getUsername(), Role.Students, token);
                     }
-                    return jsonLoginBuilder(user.getUsername(), Role.Students, token);
-
                 } catch(Exception e){
                     return jsonLoginBuilder(user.getUsername(), Role.Students, token);
                 }
@@ -113,13 +112,14 @@ public class Repository {
         List<Candidate> candidates = em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList();
         for (Candidate c : candidates) {
             if (candidate.getUsername().equals(c.getUsername())) {
+                System.out.println("failed to insert");
                 return "{\"response\":\"Failed: Candidate already inserted.\"";
             }
         }
         em.getTransaction().begin();
         em.persist(candidate);
-        em.persist(new Result(candidate));
         em.getTransaction().commit();
+        System.out.println("candidate inserted");
         return "{\"response\":\"Candidate set.\"";
     }
 
@@ -143,7 +143,7 @@ public class Repository {
     public String instanceCVs(String schoolClass) {
         this.cvs.clear();
         for (Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
-            cvs.add(new CandidateVote(candidate, schoolClass));
+            cvs.add(new CandidateVote(candidate, em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClass", SchoolClass.class).setParameter("schoolClass", schoolClass).getSingleResult()));
         }
         return "{\"response\":\"CVs created.\"";
     }
@@ -157,7 +157,8 @@ public class Repository {
      * @return a String
      */
     public String parseJson(Point[] points) {
-        if (!em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult().isEndedCompletely()) {
+        Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+        if (e.getElectionState() != 0) {
             for (int i = 0; i < points.length; i++) {
                 for (CandidateVote cv : cvs) {
                     if (cv.getCandidate().getUsername().equals(points[i].getId())) {
@@ -201,24 +202,23 @@ public class Repository {
         for (int i = 0; i < 5; i++) {
             toReturn.add(i, new JSONObject());
         }
-        for (Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
-            result.setScore(0);
-            result.setFirst(0);
+        Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+        for (Candidate candidate : e.getCandidates()) {
             for (CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-                if (result.getCandidate().equals(candidateVote.getCandidate())) {
-                    result.setScore(result.getScore() + candidateVote.getScore());
-                    result.setFirst(result.getFirst() + candidateVote.getFirst());
+                if (candidate.equals(candidateVote.getCandidate())) {
+                    candidate.setScore(candidate.getScore() + candidateVote.getScore());
+                    candidate.setFirst(candidate.getFirst() + candidateVote.getFirst());
                 }
-                if (!toReturn.get(4).has(candidateVote.getSchoolClass())) {
-                    toReturn.get(4).put(candidateVote.getSchoolClass(), 0);
+                if (!toReturn.get(4).has(candidateVote.getSchoolClass().getName())) {
+                    toReturn.get(4).put(candidateVote.getSchoolClass().getName(), 0);
                 }
             }
-            if (result.getCandidate().getPosition().equals("s")) {
-                toReturn.get(0).put(result.getCandidate().getLastname(), result.getScore());
-                toReturn.get(1).put(result.getCandidate().getLastname(), result.getFirst());
+            if (candidate.getPosition().equals("s")) {
+                toReturn.get(0).put(candidate.getLastname(), candidate.getScore());
+                toReturn.get(1).put(candidate.getLastname(), candidate.getFirst());
             } else {
-                toReturn.get(2).put(result.getCandidate().getLastname(), result.getScore());
-                toReturn.get(3).put(result.getCandidate().getLastname(), result.getFirst());
+                toReturn.get(2).put(candidate.getLastname(), candidate.getScore());
+                toReturn.get(3).put(candidate.getLastname(), candidate.getFirst());
             }
         }
         return toReturn.toString();
@@ -233,7 +233,7 @@ public class Repository {
      * @return a String
      */
     public String deleteCVs(String schoolClass) {
-        for (CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
+        for (CandidateVote cv : em.createQuery("SELECT cv FROM CandidateVote cv WHERE cv.schoolClass.name = :schoolClass", CandidateVote.class).setParameter("schoolClass", schoolClass).getResultList()) {
             em.getTransaction().begin();
             em.remove(cv);
             em.getTransaction().commit();
@@ -250,20 +250,18 @@ public class Repository {
      */
     public String endElection() {
         em.getTransaction().begin();
-        for (Result result : em.createQuery("SELECT r FROM Result r", Result.class).getResultList()) {
-            result.setScore(0);
-            result.setFirst(0);
+        Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+        for (Candidate candidate : e.getCandidates()) {
             for (CandidateVote candidateVote : em.createQuery("SELECT cv FROM CandidateVote cv", CandidateVote.class).getResultList()) {
-                if (result.getCandidate().equals(candidateVote.getCandidate())) {
-                    result.setScore(result.getScore() + candidateVote.getScore());
-                    result.setFirst(result.getFirst() + candidateVote.getFirst());
-                    em.merge(result);
+                if (candidateVote.getCandidate().equals(candidate)) {
+                    candidate.setScore(candidate.getScore() + candidateVote.getScore());
+                    candidate.setFirst(candidate.getFirst() + candidateVote.getFirst());
                 }
             }
+            em.merge(candidate);
         }
-        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
-        es.setEndedCompletely(true);
-        em.merge(es);
+        e.setElectionState(0);
+        em.merge(e);
         em.getTransaction().commit();
         return "{\"response\":\"Results commited.\"";
     }
@@ -277,9 +275,9 @@ public class Repository {
      */
     public String startElection() {
         em.getTransaction().begin();
-        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
-        es.setStarted(true);
-        em.merge(es);
+        Election e = em.createQuery("SELECT e FROM Election e", Election.class).getSingleResult();
+        e.setElectionState(2);
+        em.merge(e);
         em.getTransaction().commit();
         return "{\"response\":\"Election started.\"";
     }
@@ -293,11 +291,13 @@ public class Repository {
      */
     public String endElectionTeacher() {
         em.getTransaction().begin();
-        ElectionState es = em.createQuery("SELECT es FROM ElectionState es", ElectionState.class).getSingleResult();
-        es.setEnded(true);
-        em.merge(es);
+        Election e = em.createQuery("SELECT e FROM Election e", Election.class).getSingleResult();
+        e.setElectionState(1);
+        em.merge(e);
         em.getTransaction().commit();
         return "{\"response\":\"Election for Teacher ended.\"";
     }
+
+
 
 }
