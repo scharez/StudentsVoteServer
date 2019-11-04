@@ -11,8 +11,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 public class Main {
 
-
-
     public static final String BASE_URI = "http://localhost:8080/rest";
 
     public static org.glassfish.grizzly.http.server.HttpServer startServer() {

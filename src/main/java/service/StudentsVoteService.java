@@ -1,12 +1,13 @@
 package service;
 
-import entity.Candidate;
-import repository.Repository;
-import utils.Point;
+import data.dto.CandidatureDTO;
+import data.dto.SchoolClassResultDTO;
+import data.enums.ElectionType;
+import repository.*;
 import utils.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
+import java.util.Date;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -28,145 +29,106 @@ public class StudentsVoteService {
         return Repository.getInstance().loginCheck(user);
     }
 
-    /**
-     * Returns all Candidates
-     *
-     * @return a stringyfied List of all Candidates
-     */
     @Path("getCandidates")
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public String getCandidates(){
-        return Repository.getInstance().getCandidates();
+        System.out.println("getCandidates");
+        return CandidateRepository.getInstance().getCandidates();
     }
 
-    // Nachdem der Wahlleiter einen Kandidaten eingetragen hat
-    /**
-     * Persists a new Candidate and creates the corresponding Result
-     *
-     * @param candidate Candidate
-     * @return a String
-     */
-    @Path("setCandidate")
+    @Path("createCandidate")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String setCandidate(Candidate candidate){
-        System.out.println("pls send help");
-        return Repository.getInstance().setCandidate(candidate);
+    public String createCandidate(String username, String firstname, String lastname){
+        System.out.println("createCandidate");
+        return CandidateRepository.getInstance().createCandidate(username, firstname, lastname);
     }
 
-    // Nachdem der Lehrer die Klasse angegeben hat || Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
-    /**
-     * Creates and temporarily saves a CV in a SchoolClass for each Candidate
-     *
-     * @param schoolClass String of SchoolClass name
-     * @return a String
-     */
-    @Path("instanceCVs")
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String instanceCVs(String schoolClass) {
-        System.out.println("CVs created.");
-        return Repository.getInstance().instanceCVs(schoolClass);
-    }
-
-    // Nachdem der Lehrer einen einzelnen Zettel bestätigt
-    /**
-     * Temporarily saves the Points from a single voting paper
-     *
-     * @param points Point[]
-     * @return a String
-     */
-    @Path("parseJson")
+    @Path("createCandidature")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String parseJson(Point[] points) {
-        System.out.println("Points added.");
-        return Repository.getInstance().parseJson(points);
+    public String createCandidature(CandidatureDTO candidatureDTO) {
+        System.out.println("createCandidature");
+        return CandidatureRepository.getInstance().createCandidature(candidatureDTO);
     }
 
-    // Nachdem der Lehrer die Wahl in einer Klasse beendet || Nachdem der Wahlleiter den Nachtrag einer Klasse beendet
-    /**
-     * Persist the CVs of a SchoolClass
-     *
-     * @return a String
-     */
-    @Path("persistCVs")
+    @Path("createElection")
     @POST
-    public String persistCVs() {
-        System.out.println("CVs persisted");
-        return Repository.getInstance().persistCVs();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createElection(Date date, ElectionType electionType) {
+        System.out.println("createElection");
+        return ElectionRepository.getInstance().createElection(date, electionType);
     }
 
-    // Nachdem der Wahlleiter die Diagramme lädt
-    /**
-     * Return current Results and SchoolClasses that already voted
-     *
-     * @return a String (Json) of the Results and SchoolClasses
-     */
-    @Path("getCVs")
-    @POST
-    public String getCVs() {
-        System.out.println("Got CVs");
-        return Repository.getInstance().getCVs();
-    }
-
-    // Nachdem der Wahlleiter die Klasse angegeben hat, deren Cvs gelöscht werden sollen
-    /**
-     * Delete previously persisted CVs
-     *
-     * @param schoolClass String of the SchoolClass's name who's Results must be removed
-     * @return a String
-     */
-    @Path("deleteCVs")
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    public String deleteCVs(String schoolClass) {
-        System.out.println("CVs deleted.");
-        return Repository.getInstance().deleteCVs(schoolClass);
-    }
-
-    // Nachdem der Wahlleiter die Wahl für alle beendet
-    /**
-     * End the election, calculate and persist the result
-     *
-     * @return a String
-     */
-    @Path("endElection")
-    @POST
-    public String endElection() {
-        System.out.println("Results persisted.");
-        return Repository.getInstance().endElection();
-    }
-
-    // Nachdem der Wahlleiter die Wahl startet
-    /**
-     * Starts the election, makes Teacher able to log in
-     *
-     * @return a String
-     */
     @Path("startElection")
     @POST
-    public String startElection() {
-        System.out.println("Election started.");
-        return Repository.getInstance().startElection();
+    public String createElection() {
+        System.out.println("startElection");
+        return ElectionRepository.getInstance().startElection();
     }
 
     @Path("endElectionTeacher")
     @POST
     public String endElectionTeacher() {
-        System.out.println("Election for Teacher ended.");
-        return Repository.getInstance().endElectionTeacher();
+        System.out.println("endElectionTeacher");
+        return ElectionRepository.getInstance().endElectionTeacher();
     }
 
-    /*@Path("gimmeimage/{id}")
+    @Path("endElection")
+    @POST
+    public String endElection() {
+        System.out.println("endElection");
+        return ElectionRepository.getInstance().endElection();
+    }
+
+    @Path("createSchoolClass")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String saveimage(File file, @PathParam("id") int id){
+    public String createSchoolClass(String name, Date date) {
+        System.out.println("createSchoolClass");
+        return SchoolClassRepository.getInstance().createSchoolClass(name, date);
+    }
 
-        Repository.getInstance().saveimage(file, id);
-        return "got it";
-    }*/
+    @Path("createSchoolClassResult")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createSchoolClassResult(SchoolClassResultDTO schoolClassResultDTO) {
+        System.out.println("createSchoolClass");
+        return SchoolClassResultRepository.getInstance().createSchoolClassResult(schoolClassResultDTO);
+    }
+
+    @Path("getVotingClasses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getVotingClasses() {
+        System.out.println("getVotingClasses");
+        return SchoolClassResultRepository.getInstance().getVotingClasses();
+    }
+
+    @Path("getFinishedClasses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getFinishedClasses() {
+        System.out.println("getFinishedClasses");
+        return SchoolClassResultRepository.getInstance().getFinishedClasses();
+    }
+
+    @Path("deleteSchoolClassResult")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String deleteSchoolClassResult(String schoolClassName) {
+        System.out.println("deleteSchoolClassResult");
+        return SchoolClassResultRepository.getInstance().deleteSchoolClassResult(schoolClassName);
+    }
+
+    @Path("getSchoolClassResults")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String getSchoolClassResults(Date date, ElectionType electionType) {
+        System.out.println("deleteSchoolClassResult");
+        return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, electionType);
+    }
 
 }

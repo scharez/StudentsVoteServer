@@ -1,22 +1,25 @@
-package entity;
+package data.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class SchoolClass {
 
     @Id
     @GeneratedValue
-    private int     id;
+    private int id;
 
-    private String  name;
-    private boolean hasVoted;
+    private String name;
+
+    @Temporal(TemporalType.DATE)
+    private Date date;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name) {
+    public SchoolClass(String name, Date date) {
         this.name = name;
-        this.hasVoted = false;
+        this.date = date;
     }
 
     public int getId() {
@@ -35,12 +38,12 @@ public class SchoolClass {
         this.name = name;
     }
 
-    public boolean getHasVoted() {
-        return hasVoted;
+    public Date getDate() {
+        return date;
     }
 
-    public void setHasVoted(boolean hasVorted) {
-        this.hasVoted = hasVorted;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
 }
