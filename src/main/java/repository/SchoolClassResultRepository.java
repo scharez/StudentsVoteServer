@@ -91,7 +91,7 @@ public class SchoolClassResultRepository {
     }
 
     // Returns the current SchoolClassResults
-    public String getSchoolClassResults(Date date, ElectionType electionType) {
+    public String getSchoolClassResults(String date, ElectionType electionType) {
         List<JSONObject> toReturn = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             toReturn.add(i, new JSONObject());

@@ -12,12 +12,11 @@ public class SchoolClass {
 
     private String name;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private String date;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name, Date date) {
+    public SchoolClass(String name, String date) {
         this.name = name;
         this.date = date;
     }
@@ -38,11 +37,11 @@ public class SchoolClass {
         this.name = name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

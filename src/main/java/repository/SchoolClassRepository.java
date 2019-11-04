@@ -19,7 +19,7 @@ public class SchoolClassRepository {
         return instance;
     }
 
-    public String createSchoolClass(String name, Date date) {
+    public String createSchoolClass(String name, String date) {
         for(SchoolClass schoolClass : em.createQuery("SELECT sc FROM SchoolClass sc", SchoolClass.class).getResultList()) {
             if(schoolClass.getName().equals(name) && schoolClass.getDate().equals(date)) {
                 return "SchoolClass already exists!";
