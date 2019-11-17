@@ -7,6 +7,7 @@ import repository.*;
 import utils.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.util.Date;
 
 @Path("sv")
@@ -106,6 +107,15 @@ public class StudentsVoteService {
         System.out.println("getVotingClasses");
         return SchoolClassResultRepository.getInstance().getVotingClasses();
     }
+    // Wird nicht wirklich gelöscht
+    @Path("deleteClass")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteClass(){
+
+      SchoolClassResultRepository.getInstance().deleteClass();
+
+    }
 
     @Path("getFinishedClasses")
     @GET
@@ -130,5 +140,14 @@ public class StudentsVoteService {
         System.out.println("deleteSchoolClassResult");
         return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, electionType);
     }
+
+  @Path("uploadCSV")
+  @POST
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  public String uploadCSV(@FormParam("file") File file) {
+
+    Repository.getInstance().readCsvFile(file);
+    return "CSV uploaded";
+  }
 
 }

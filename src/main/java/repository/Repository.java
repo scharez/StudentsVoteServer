@@ -1,9 +1,6 @@
 package repository;
 
-import data.entity.Candidate;
-import data.entity.Election;
-import data.entity.ReturningOfficer;
-import data.entity.SchoolClassResult;
+import data.entity.*;
 import data.enums.ElectionState;
 import jwt.JwtBuilder;
 import ldapuser.LdapAuthException;
@@ -17,7 +14,11 @@ import utils.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -98,5 +99,25 @@ public class Repository {
             return false;
         }
     }
+
+  public String readCsvFile(File file) {
+
+    List<String> lines = null;
+    try {
+      lines = Files.readAllLines(file.toPath());
+    } catch (IOException e) {
+      return "Irg stimmt mit CSV nd";
+    }
+
+    em.getTransaction().begin();
+    for (String name : lines) {
+      em.persist(new SchoolClass(name, new Date()));
+    }
+    em.getTransaction().commit();
+
+    System.out.println(file.getName());
+
+    return "CSV uploaded";
+  }
 
 }

@@ -121,4 +121,7 @@ public class SchoolClassResultRepository {
         return toReturn.toString();
     }
 
+  public void deleteClass() {
+      
+  }
 }
