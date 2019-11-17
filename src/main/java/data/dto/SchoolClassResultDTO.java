@@ -6,10 +6,10 @@ public class SchoolClassResultDTO {
 
     private String username;
     private String schoolClassName;
-    private Date date;
+    private String date;
     private int score;
 
-    public SchoolClassResultDTO(String username, String schoolClassName, Date date, int score) {
+    public SchoolClassResultDTO(String username, String schoolClassName, String date, int score) {
         this.username = username;
         this.schoolClassName = schoolClassName;
         this.date = date;
@@ -32,11 +32,11 @@ public class SchoolClassResultDTO {
         this.schoolClassName = schoolClassName;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

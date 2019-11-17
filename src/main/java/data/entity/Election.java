@@ -4,7 +4,6 @@ import data.enums.ElectionState;
 import data.enums.ElectionType;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Election {
@@ -13,15 +12,14 @@ public class Election {
     @GeneratedValue
     private int id;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private String date;
 
     private ElectionType electionType;
     private ElectionState electionState;
 
     public Election() {}
 
-    public Election(Date date, ElectionType electionType) {
+    public Election(String date, ElectionType electionType) {
         this.date = date;
         this.electionType = electionType;
         this.electionState = ElectionState.NEW;
@@ -35,11 +33,11 @@ public class Election {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

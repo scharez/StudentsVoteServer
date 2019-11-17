@@ -21,12 +21,12 @@ public class ElectionRepository {
         return instance;
     }
 
-    public String createElection(Date date, ElectionType electionType) {
+    public String createElection(String date, ElectionType electionType) {
         for(Election election : em.createQuery("SELECT e FROM Candidate e", Election.class).getResultList()) {
             if(!election.getElectionType().equals(ElectionType.STICHWAHL)) {
-                if(election.getDate().equals(date) && election.getElectionType().equals(electionType)) {
+                /*if(election.getDate().equals(date) && election.getElectionType().equals(electionType)) {
                     return "An Election of this ElectionType was already held this year.";
-                }
+                }*/
             }
         }
         em.getTransaction().begin();

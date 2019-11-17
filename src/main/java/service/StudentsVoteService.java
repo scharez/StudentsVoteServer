@@ -3,6 +3,7 @@ package service;
 import data.dto.CandidatureDTO;
 import data.dto.SchoolClassResultDTO;
 import data.enums.ElectionType;
+import org.json.JSONObject;
 import repository.*;
 import utils.User;
 import javax.ws.rs.*;
@@ -42,7 +43,11 @@ public class StudentsVoteService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String createCandidate(String username, String firstname, String lastname){
+    public String createCandidate(String json){
+        JSONObject jsonObject = new JSONObject(json);
+        String username = jsonObject.get("username").toString();
+        String firstname = jsonObject.get("firstname").toString();
+        String lastname = jsonObject.get("lastname").toString();
         System.out.println("createCandidate");
         return CandidateRepository.getInstance().createCandidate(username, firstname, lastname);
     }
@@ -58,14 +63,18 @@ public class StudentsVoteService {
     @Path("createElection")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String createElection(Date date, ElectionType electionType) {
+    public String createElection(String json) {
+        JSONObject jsonObject = new JSONObject(json);
+        String date = jsonObject.get("date").toString();
+        String electionType = jsonObject.get("electionType").toString();
         System.out.println("createElection");
-        return ElectionRepository.getInstance().createElection(date, electionType);
+        return ElectionRepository.getInstance().createElection(date, Enum.valueOf(ElectionType.class, electionType));
+
     }
 
     @Path("startElection")
     @POST
-    public String createElection() {
+    public String startElection() {
         System.out.println("startElection");
         return ElectionRepository.getInstance().startElection();
     }
@@ -87,7 +96,10 @@ public class StudentsVoteService {
     @Path("createSchoolClass")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String createSchoolClass(String name, Date date) {
+    public String createSchoolClass(String json) {
+        JSONObject jsonObject = new JSONObject(json);
+        String name = jsonObject.get("name").toString();
+        String date = jsonObject.get("date").toString();
         System.out.println("createSchoolClass");
         return SchoolClassRepository.getInstance().createSchoolClass(name, date);
     }
@@ -136,9 +148,12 @@ public class StudentsVoteService {
     @Path("getSchoolClassResults")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String getSchoolClassResults(Date date, ElectionType electionType) {
+    public String getSchoolClassResults(String json) {
+        JSONObject jsonObject = new JSONObject(json);
+        String date = jsonObject.get("date").toString();
+        String electionType = jsonObject.get("electionType").toString();
         System.out.println("deleteSchoolClassResult");
-        return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, electionType);
+        return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, Enum.valueOf(ElectionType.class, electionType));
     }
 
   @Path("uploadCSV")

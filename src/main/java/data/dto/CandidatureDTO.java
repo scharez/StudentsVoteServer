@@ -8,13 +8,13 @@ import java.util.Date;
 public class CandidatureDTO {
 
     private String username;
-    private Date date;
+    private String date;
     private ElectionType electionType;
     private String schoolClassName;
     private File picture;
     private String electionPromise;
 
-    public CandidatureDTO(String username, Date date, ElectionType electionType, String schoolClassName, File picture, String electionPromise) {
+    public CandidatureDTO(String username, String date, ElectionType electionType, String schoolClassName, File picture, String electionPromise) {
         this.username = username;
         this.date = date;
         this.electionType = electionType;
@@ -31,11 +31,11 @@ public class CandidatureDTO {
         this.username = username;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
