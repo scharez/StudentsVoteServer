@@ -111,7 +111,7 @@ public class Repository {
 
     em.getTransaction().begin();
     for (String name : lines) {
-      em.persist(new SchoolClass(name, new Date()));
+      em.persist(new SchoolClass(name, new Date().toString()));
     }
     em.getTransaction().commit();
 
