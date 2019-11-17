@@ -12,13 +12,13 @@ public class SchoolClass {
 
     private String name;
 
-    private String date;
+    private String ded;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name, String date) {
+    public SchoolClass(String name, String ded) {
         this.name = name;
-        this.date = date;
+        this.ded = ded;
     }
 
     public int getId() {
@@ -37,12 +37,12 @@ public class SchoolClass {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
+    public String getded() {
+        return ded;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setded(String ded) {
+        this.ded = ded;
     }
 
 }

@@ -9,7 +9,6 @@ import utils.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
-import java.util.Date;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -55,6 +54,7 @@ public class StudentsVoteService {
     @Path("createCandidature")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public String createCandidature(CandidatureDTO candidatureDTO) {
         System.out.println("createCandidature");
         return CandidatureRepository.getInstance().createCandidature(candidatureDTO);
@@ -64,6 +64,7 @@ public class StudentsVoteService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public String createElection(String json) {
+        System.out.println("Im createElection");
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
@@ -119,15 +120,6 @@ public class StudentsVoteService {
         System.out.println("getVotingClasses");
         return SchoolClassResultRepository.getInstance().getVotingClasses();
     }
-    // Wird nicht wirklich gelöscht
-    @Path("deleteClass")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteClass(){
-
-      SchoolClassResultRepository.getInstance().deleteClass();
-
-    }
 
     @Path("getFinishedClasses")
     @GET
@@ -156,13 +148,21 @@ public class StudentsVoteService {
         return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, Enum.valueOf(ElectionType.class, electionType));
     }
 
-  @Path("uploadCSV")
-  @POST
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  public String uploadCSV(@FormParam("file") File file) {
+    @Path("uploadCSV")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public String uploadCSV(@FormParam("file") File file) {
 
-    Repository.getInstance().readCsvFile(file);
-    return "CSV uploaded";
-  }
+        Repository.getInstance().readCsvFile(file);
+        return "CSV uploaded";
+    }
+
+    @Path("getCurrentVoteDate")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String uploadCSV() {
+
+        return Repository.getInstance().getCurrentVoteDate();
+    }
 
 }

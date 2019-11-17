@@ -1,7 +1,9 @@
 package data.enums;
 
+import javax.persistence.Enumerated;
+
 public enum ElectionState {
-    NEW,
+    @Enumerated NEW,
     RUNNING,
     STOPPED,
     ENDED

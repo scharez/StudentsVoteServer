@@ -9,20 +9,21 @@ import javax.persistence.*;
 public class Election {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private String date;
+    private String currentDate;
 
     private ElectionType electionType;
     private ElectionState electionState;
 
-    public Election() {}
-
-    public Election(String date, ElectionType electionType) {
-        this.date = date;
-        this.electionType = electionType;
+    public Election() {
         this.electionState = ElectionState.NEW;
+    }
+
+    public Election(String currentDate, ElectionType electionType) {
+        this.currentDate = currentDate;
+        this.electionType = electionType;
     }
 
     public int getId() {
@@ -33,12 +34,12 @@ public class Election {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
+    public String getcurrentDate() {
+        return currentDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setcurrentDate(String currentDate) {
+        this.currentDate = currentDate;
     }
 
     public ElectionType getElectionType() {

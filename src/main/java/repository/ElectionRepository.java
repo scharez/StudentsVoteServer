@@ -29,8 +29,13 @@ public class ElectionRepository {
                 }*/
             }
         }
+
+        Election e = new Election();
+        e.setElectionType(electionType);
+        e.setcurrentDate(date);
+
         em.getTransaction().begin();
-        em.persist(new Election(date, electionType));
+        em.persist(e);
         em.getTransaction().commit();
         return "Election successfully created.";
     }
@@ -58,7 +63,7 @@ public class ElectionRepository {
     // The election is finalized and no results can be altered.
     public String endElection() {
         em.getTransaction().begin();
-        Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+        Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
         e.setElectionState(ElectionState.ENDED);
         em.merge(e);
         em.getTransaction().commit();

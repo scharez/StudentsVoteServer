@@ -55,7 +55,7 @@ public class Repository {
                 return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
             } else {
                 try {
-                    Election e = (Election) em.createQuery("SELECT MAX(e.date) FROM Election e").getSingleResult();
+                    Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
                     if (e.getElectionState().equals(ElectionState.RUNNING)) {
                             return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
                     } else {
@@ -100,7 +100,8 @@ public class Repository {
         }
     }
 
-  public String readCsvFile(File file) {
+
+    public String readCsvFile(File file) {
 
     List<String> lines = null;
     try {
@@ -120,4 +121,16 @@ public class Repository {
     return "CSV uploaded";
   }
 
+    public String getCurrentVoteDate() {
+
+        String e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult().toString();
+
+        if(e == null) {
+            return "Scheiße";
+        }
+
+        System.out.println(e);
+
+        return e;
+    }
 }

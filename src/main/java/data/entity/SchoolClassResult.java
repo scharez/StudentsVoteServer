@@ -9,6 +9,8 @@ public class SchoolClassResult {
     @GeneratedValue
     private int id;
 
+
+
     @OneToOne
     private SchoolClass schoolClass;
 

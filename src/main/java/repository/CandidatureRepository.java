@@ -25,12 +25,12 @@ public class CandidatureRepository {
                             .setParameter("username", candidatureDTO.getUsername())
                             .getSingleResult();
             Election election =
-                    em.createQuery("SELECT e FROM Election e WHERE e.date = :date AND e.electionType = :electionType", Election.class)
+                    em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                             .setParameter("date", candidatureDTO.getDate())
                             .setParameter("electionType", candidatureDTO.getElectionType())
                             .getSingleResult();
             SchoolClass schoolClass =
-                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.date = :date", SchoolClass.class)
+                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.ded = :date", SchoolClass.class)
                             .setParameter("schoolClassName", candidatureDTO.getSchoolClassName())
                             .setParameter("date", candidatureDTO.getDate())
                             .getSingleResult();
@@ -46,6 +46,7 @@ public class CandidatureRepository {
             em.getTransaction().commit();
             return "Candidatue successfully created.";
         } catch(Exception e) {
+            e.printStackTrace();
             return "Failed to create Candidature";
         }
     }
