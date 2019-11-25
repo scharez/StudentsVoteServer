@@ -3,6 +3,7 @@ package service;
 import data.dto.CandidatureDTO;
 import data.dto.SchoolClassResultDTO;
 import data.enums.ElectionType;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONObject;
 import repository.*;
 import utils.User;
@@ -43,6 +44,7 @@ public class StudentsVoteService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String createCandidate(String json){
+        System.err.println("first step done");
         JSONObject jsonObject = new JSONObject(json);
         String username = jsonObject.get("username").toString();
         String firstname = jsonObject.get("firstname").toString();
@@ -54,7 +56,7 @@ public class StudentsVoteService {
     @Path("createCandidature")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String createCandidature(CandidatureDTO candidatureDTO) {
         System.out.println("createCandidature");
         return CandidatureRepository.getInstance().createCandidature(candidatureDTO);
@@ -151,7 +153,7 @@ public class StudentsVoteService {
     @Path("uploadCSV")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String uploadCSV(@FormParam("file") File file) {
+    public String uploadCSV(@FormDataParam("file") File file) {
 
         Repository.getInstance().readCsvFile(file);
         return "CSV uploaded";

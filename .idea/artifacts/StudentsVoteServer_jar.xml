@@ -58,7 +58,7 @@
       <element id="library" level="project" name="Maven: org.apache.derby:derbyclient:10.12.1.1" />
       <element id="jpa-descriptors" facet="StudentsVoteServer/jpa/JPA" />
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
       </element>
     </root>
   </artifact>

@@ -5,6 +5,7 @@ import data.entity.Candidature;
 import data.entity.SchoolClass;
 import data.entity.SchoolClassResult;
 import data.enums.ElectionType;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.EntityManager;
@@ -31,7 +32,7 @@ public class SchoolClassResultRepository {
     public String createSchoolClassResult(SchoolClassResultDTO schoolClassResultDTO) {
         try {
             SchoolClass schoolClass =
-                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.date = :date", SchoolClass.class)
+                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.ded = :date", SchoolClass.class)
                             .setParameter("schoolClassName", schoolClassResultDTO.getSchoolClassName())
                             .setParameter("date", schoolClassResultDTO.getDate())
                             .getSingleResult();
@@ -63,7 +64,9 @@ public class SchoolClassResultRepository {
                 schoolClasses.remove(schoolClassResult.getSchoolClass());
             }
         }
-        return schoolClasses.toString();
+        JSONArray json = new JSONArray(schoolClasses);
+        System.out.println(json.toString());
+        return json.toString();
     }
 
     // Returns a List SchoolClasses that already voted.
@@ -74,7 +77,12 @@ public class SchoolClassResultRepository {
                 schoolClasses.add(schoolClassResult.getSchoolClass());
             }
         }
-        return schoolClasses.toString();
+        for (SchoolClass sc : schoolClasses) {
+          System.out.println(sc.getName());
+        }
+      JSONArray json = new JSONArray(schoolClasses);
+      System.out.println(json.toString());
+        return json.toString();
     }
 
     // Deletes all SchoolClassResults from a SchoolClass
@@ -97,7 +105,7 @@ public class SchoolClassResultRepository {
             toReturn.add(i, new JSONObject());
         }
         List<Candidature> candidatures =
-                em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.date = :date AND cu.election.electionType = :electionType", Candidature.class)
+                em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.currentDate = :date AND cu.election.electionType = :electionType", Candidature.class)
                         .setParameter("date", date)
                         .setParameter("electionType", electionType)
                         .getResultList();
@@ -122,6 +130,6 @@ public class SchoolClassResultRepository {
     }
 
   public void deleteClass() {
-      
+
   }
 }

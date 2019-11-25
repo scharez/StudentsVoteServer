@@ -44,6 +44,7 @@ public class CandidatureRepository {
                     candidatureDTO.getElectionPromise()
             ));
             em.getTransaction().commit();
+          System.out.println("this is a looooooooooooooooooooooooooooooooooooooooooooong text");
             return "Candidatue successfully created.";
         } catch(Exception e) {
             e.printStackTrace();

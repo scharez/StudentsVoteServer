@@ -24,9 +24,11 @@ public class CandidateRepository {
                 return "Candidate already exists!";
             }
         }
+        System.out.println("lol1");
         em.getTransaction().begin();
         em.persist(new Candidate(username, firstname, lastname));
         em.getTransaction().commit();
+        System.out.println("lol2");
         return "Candidate successfully created.";
     }
 
