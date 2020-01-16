@@ -1,6 +1,5 @@
 package data.entity;
 
-import java.io.File;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -11,9 +10,9 @@ public class Candidate implements Serializable {
     @GeneratedValue
     private int id;
 
-    private String  username;
-    private String  firstname;
-    private String  lastname;
+    private String username;
+    private String firstname;
+    private String lastname;
 
     public Candidate() {}
 

@@ -28,7 +28,7 @@ public class SchoolClassRepository {
         em.getTransaction().begin();
         em.persist(new SchoolClass(name, date));
         em.getTransaction().commit();
-        return "Candidate successfully created.";
+        return "SchoolClass successfully created.";
     }
 
 }

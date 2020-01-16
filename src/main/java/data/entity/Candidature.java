@@ -22,7 +22,7 @@ public class Candidature {
     private SchoolClass schoolClass;
 
     private File picture;
-    private String  electionPromise;
+    private String electionPromise;
 
     @OneToMany
     private List<SchoolClassResult> schoolClassResults;

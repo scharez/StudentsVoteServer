@@ -1,7 +1,6 @@
 package data.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class SchoolClass {
@@ -12,13 +11,13 @@ public class SchoolClass {
 
     private String name;
 
-    private String ded;
+    private String currentDate;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name, String ded) {
+    public SchoolClass(String name, String currentDate) {
         this.name = name;
-        this.ded = ded;
+        this.currentDate = currentDate;
     }
 
     public int getId() {
@@ -38,11 +37,11 @@ public class SchoolClass {
     }
 
     public String getded() {
-        return ded;
+        return currentDate;
     }
 
     public void setded(String ded) {
-        this.ded = ded;
+        this.currentDate = ded;
     }
 
 }

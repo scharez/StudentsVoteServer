@@ -8,6 +8,8 @@ import java.util.Date;
 public class CandidatureDTO {
 
     private String username;
+    private String firstname = "";
+    private String lastname = "";
     private String date;
     private ElectionType electionType;
     private String schoolClassName;
@@ -23,12 +25,37 @@ public class CandidatureDTO {
         this.electionPromise = electionPromise;
     }
 
+    public CandidatureDTO(String username, String fistname, String lastname, String schoolClassName, File picture, String electionPromise) {
+        this.username = username;
+        this.firstname = fistname;
+        this.lastname = lastname;
+        this.schoolClassName = schoolClassName;
+        this.picture = picture;
+        this.electionPromise = electionPromise;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getDate() {

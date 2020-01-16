@@ -1,19 +1,19 @@
 package data.dto;
 
-import java.util.Date;
-
 public class SchoolClassResultDTO {
 
     private String username;
     private String schoolClassName;
     private String date;
     private int score;
+    private int first;
 
-    public SchoolClassResultDTO(String username, String schoolClassName, String date, int score) {
+    public SchoolClassResultDTO(String username, String schoolClassName, String date, int score, int first) {
         this.username = username;
         this.schoolClassName = schoolClassName;
         this.date = date;
         this.score = score;
+        this.first = first;
     }
 
     public String getUsername() {
@@ -46,6 +46,14 @@ public class SchoolClassResultDTO {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getFirst() {
+        return first;
+    }
+
+    public void setFirst(int first) {
+        this.first = first;
     }
 
 }

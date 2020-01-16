@@ -2,6 +2,7 @@ package repository;
 
 import data.entity.*;
 import data.enums.ElectionState;
+import data.enums.ElectionType;
 import jwt.JwtBuilder;
 import ldapuser.LdapAuthException;
 import ldapuser.LdapException;
@@ -38,11 +39,11 @@ public class Repository {
         return instance;
     }
 
-    public String loginCheck(User user) {
+    public String loginCheck(String username, String password) {
         CustomException ce = new CustomException();
         LdapUser lu;
         try {
-            lu = new LdapUser(user.getUsername(), user.getPassword().toCharArray());
+            lu = new LdapUser(username, password.toCharArray());
         } catch (LdapException e) {
             return ce.buildException(503, "Service Unavailable", "LDAP not working");
         } catch (LdapAuthException e) {
@@ -50,27 +51,27 @@ public class Repository {
         }
         String token;
         if (lu.isTeacher()) {
-            token = new JwtBuilder().create(user.getUsername());
-            if (isReturningOfficer(user.getUsername())) {
-                return jsonLoginBuilder(user.getUsername(), Role.ADMIN, token);
+            token = new JwtBuilder().create(username);
+            if (isReturningOfficer(username)) {
+                return jsonLoginBuilder(username, Role.ADMIN, token);
             } else {
                 try {
                     Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
                     if (e.getElectionState().equals(ElectionState.RUNNING)) {
-                            return jsonLoginBuilder(user.getUsername(), Role.Teacher, token);
+                            return jsonLoginBuilder(username, Role.Teacher, token);
                     } else {
-                        return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+                        return jsonLoginBuilder(username, Role.Students, token);
                     }
                 } catch(Exception e){
-                    return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+                    return jsonLoginBuilder(username, Role.Students, token);
                 }
             }
         } else {
-            token = new JwtBuilder().create(user.getUsername());
-            if (isCandidate(user.getUsername())) {
-                return jsonLoginBuilder(user.getUsername(), Role.Candidates, token);
+            token = new JwtBuilder().create(username);
+            if (isCandidate(username)) {
+                return jsonLoginBuilder(username, Role.Candidates, token);
             } else {
-                return jsonLoginBuilder(user.getUsername(), Role.Students, token);
+                return jsonLoginBuilder(username, Role.Students, token);
             }
         }
     }
@@ -100,37 +101,31 @@ public class Repository {
         }
     }
 
-
     public String readCsvFile(File file) {
-
-    List<String> lines = null;
-    try {
-      lines = Files.readAllLines(file.toPath());
-    } catch (IOException e) {
-      return "Irg stimmt mit CSV nd";
-    }
-
-    em.getTransaction().begin();
-    for (String name : lines) {
-      em.persist(new SchoolClass(name, new Date().toString()));
-    }
-    em.getTransaction().commit();
-
-    System.out.println(file.getName());
-
-    return "CSV uploaded";
-  }
-
-    public String getCurrentVoteDate() {
-
-        String e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult().toString();
-
-        if(e == null) {
-            return "Scheiße";
+        List<String> lines = null;
+        try {
+          lines = Files.readAllLines(file.toPath());
+        } catch (IOException e) {
+          return "Failed to upload CSV";
         }
+        em.getTransaction().begin();
+        for (String name : lines) {
+          em.persist(new SchoolClass(name, new Date().toString()));
+        }
+        em.getTransaction().commit();
+        System.out.println(file.getName());
+        return "CSV uploaded";
+    }
 
-        System.out.println(e);
-
-        return e;
+    public String getCurrentVoteDate(ElectionType electionType) {
+        String currentVoteDate = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.electionType = :electionType")
+                .setParameter("electionType", electionType)
+                .getSingleResult()
+                .toString();
+        if(currentVoteDate == null) {
+            return "No election found";
+        }
+        System.out.println(currentVoteDate);
+        return currentVoteDate;
     }
 }

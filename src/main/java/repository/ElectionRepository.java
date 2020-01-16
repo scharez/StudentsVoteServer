@@ -1,11 +1,13 @@
 package repository;
 
+import data.entity.Candidature;
 import data.entity.Election;
 import data.enums.ElectionState;
 import data.enums.ElectionType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 public class ElectionRepository {
 
@@ -22,13 +24,13 @@ public class ElectionRepository {
     }
 
     public String createElection(String date, ElectionType electionType) {
-        for(Election election : em.createQuery("SELECT e FROM Candidate e", Election.class).getResultList()) {
+        /*for(Election election : em.createQuery("SELECT e FROM Candidate e", Election.class).getResultList()) {
             if(!election.getElectionType().equals(ElectionType.STICHWAHL)) {
-                /*if(election.getDate().equals(date) && election.getElectionType().equals(electionType)) {
-                    return "An Election of this ElectionType was already held this year.";
-                }*/
+                if(election.getDate().equals(date) && election.getElectionType().equals(electionType)) {
+                    return "Failed to create Election.";
+                }
             }
-        }
+        }*/
 
         Election e = new Election();
         e.setElectionType(electionType);
@@ -41,9 +43,12 @@ public class ElectionRepository {
     }
 
     // Teachers can now start voting.
-    public String startElection() {
+    public String startElection(String date, ElectionType electionType) {
+        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+                .setParameter("date", date)
+                .setParameter("electionType", electionType)
+                .getSingleResult();
         em.getTransaction().begin();
-        Election e = em.createQuery("SELECT e FROM Election e", Election.class).getSingleResult();
         e.setElectionState(ElectionState.RUNNING);
         em.merge(e);
         em.getTransaction().commit();
@@ -51,23 +56,29 @@ public class ElectionRepository {
     }
 
     // Teachers can no longer vote.
-    public String endElectionTeacher() {
+    public String endElectionTeacher(String date, ElectionType electionType) {
+        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+                        .setParameter("date", date)
+                        .setParameter("electionType", electionType)
+                        .getSingleResult();
         em.getTransaction().begin();
-        Election e = em.createQuery("SELECT e FROM Election e", Election.class).getSingleResult();
         e.setElectionState(ElectionState.STOPPED);
         em.merge(e);
         em.getTransaction().commit();
-        return "{\"response\":\"Election for Teacher ended.\"";
+        return "Election for Teacher ended";
     }
 
     // The election is finalized and no results can be altered.
-    public String endElection() {
+    public String endElection(String date, ElectionType electionType) {
+        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+                .setParameter("date", date)
+                .setParameter("electionType", electionType)
+                .getSingleResult();
         em.getTransaction().begin();
-        Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
         e.setElectionState(ElectionState.ENDED);
         em.merge(e);
         em.getTransaction().commit();
-        return "{\"response\":\"Results commited.\"";
+        return "Election finished";
     }
 
 }

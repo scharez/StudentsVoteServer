@@ -3,8 +3,9 @@ package data.enums;
 import javax.persistence.Enumerated;
 
 public enum ElectionType {
-    @Enumerated SCHULSPRECHER,
+    @Enumerated
+    SCHULSPRECHER,
     ABTEILUNGSSPRECHER,
-    WAHL,
-    STICHWAHL
+    STICHWAHL_SCHULSPRECHER,
+    STICHWAHL_ABTEILUNGSSPRECHER
 }

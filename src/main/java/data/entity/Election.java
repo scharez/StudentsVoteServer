@@ -22,6 +22,7 @@ public class Election {
     }
 
     public Election(String currentDate, ElectionType electionType) {
+        this.electionState = ElectionState.NEW;
         this.currentDate = currentDate;
         this.electionType = electionType;
     }

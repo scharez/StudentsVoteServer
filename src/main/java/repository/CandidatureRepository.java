@@ -30,7 +30,7 @@ public class CandidatureRepository {
                             .setParameter("electionType", candidatureDTO.getElectionType())
                             .getSingleResult();
             SchoolClass schoolClass =
-                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.ded = :date", SchoolClass.class)
+                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName AND sc.currentDate = :date", SchoolClass.class)
                             .setParameter("schoolClassName", candidatureDTO.getSchoolClassName())
                             .setParameter("date", candidatureDTO.getDate())
                             .getSingleResult();
@@ -44,11 +44,60 @@ public class CandidatureRepository {
                     candidatureDTO.getElectionPromise()
             ));
             em.getTransaction().commit();
-            return "Candidatue successfully created.";
+            return "Candidature successfully created";
         } catch(Exception e) {
             e.printStackTrace();
             return "Failed to create Candidature";
         }
+    }
+
+    public String deleteCandidature(String username) {
+        try {
+            Candidature candidature = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.candidate.username = :username ORDER BY cu.election.currentDate DESC", Candidature.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            em.getTransaction().begin();
+            em.remove(candidature);
+            em.getTransaction().commit();
+            return "Candidature successfully deleted";
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "Failed to delete Candidature";
+        }
+    }
+
+    public String updateCandidature(CandidatureDTO candidatureDTO) {
+        try {
+            Candidature candidature = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.candidate.username = :username ORDER BY cu.election.currentDate DESC", Candidature.class)
+                    .setParameter("username", candidatureDTO.getUsername())
+                    .getSingleResult();
+
+            candidature.setSchoolClass(
+                    em.createQuery("SELECT sc FROM SchoolClass sc WHERE sc.name = :schoolClassName ORDER BY sc.currentDate DESC", SchoolClass.class)
+                        .setParameter("schoolClassName", candidatureDTO.getSchoolClassName())
+                        .getSingleResult()
+            );
+            candidature.setPicture(candidatureDTO.getPicture());
+            candidature.setElectionPromise(candidatureDTO.getElectionPromise());
+
+            Candidate candidate = candidature.getCandidate();
+            candidate.setUsername(candidatureDTO.getUsername());
+            candidate.setFirstname(candidatureDTO.getFirstname());
+            candidate.setLastname(candidatureDTO.getLastname());
+
+            em.getTransaction().begin();
+            em.merge(candidature);
+            em.merge(candidate);
+            em.getTransaction().commit();
+            return "Candidature successfully updated";
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "Failed to update Candidature";
+        }
+    }
+
+    public String getCandidatures() {
+        return em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList().toString();
     }
 
 }
