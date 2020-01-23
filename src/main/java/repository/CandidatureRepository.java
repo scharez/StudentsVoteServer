@@ -2,6 +2,8 @@ package repository;
 
 import data.dto.CandidatureDTO;
 import data.entity.*;
+import org.json.JSONArray;
+
 import javax.persistence.*;
 
 public class CandidatureRepository {
@@ -107,7 +109,9 @@ public class CandidatureRepository {
     }
 
     public String getCandidatures() {
-        return em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList().toString();
+        return new JSONArray(
+                em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList()
+        ).toString();
     }
 
 }

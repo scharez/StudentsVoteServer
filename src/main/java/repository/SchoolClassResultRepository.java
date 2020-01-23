@@ -73,8 +73,8 @@ public class SchoolClassResultRepository {
                 }
             }
         }
-
-        return schoolClasses.toString();
+        // return new Gson().toJson(schoolClasses);
+        return new JSONArray(schoolClasses).toString();
     }
 
     // Returns a List SchoolClasses that already voted.
@@ -91,7 +91,7 @@ public class SchoolClassResultRepository {
                 }
             }
         }
-        return schoolClasses.toString();
+        return new JSONArray(schoolClasses).toString();
     }
 
     // Deletes all SchoolClassResults from a SchoolClass
@@ -102,8 +102,10 @@ public class SchoolClassResultRepository {
                         .setParameter("electionType", electionType)
                         .getResultList();
         for(Candidature candidature : candidatures) {
+            System.out.println(candidature.getCandidate().getUsername());
             for(SchoolClassResult schoolClassResult : candidature.getSchoolClassResults()) {
                 if(schoolClassResult.getSchoolClass().getName().equals(schoolClassName)) {
+                    System.out.println(schoolClassResult.getSchoolClass().getName());
                     em.getTransaction().begin();
                     em.remove(schoolClassResult);
                     em.getTransaction().commit();

@@ -16,6 +16,10 @@ public class SchoolClassResultDTO {
         this.first = first;
     }
 
+    public SchoolClassResultDTO() {
+
+    }
+
     public String getUsername() {
         return username;
     }

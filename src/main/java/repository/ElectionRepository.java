@@ -45,7 +45,7 @@ public class ElectionRepository {
     // Teachers can now start voting.
     public String startElection(String date, ElectionType electionType) {
         try {
-            Election election = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+            Election election = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                     .setParameter("date", date)
                     .setParameter("electionType", electionType)
                     .getSingleResult();
@@ -62,7 +62,7 @@ public class ElectionRepository {
 
     // Teachers can no longer vote.
     public String endElectionTeacher(String date, ElectionType electionType) {
-        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+        Election e = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                         .setParameter("date", date)
                         .setParameter("electionType", electionType)
                         .getSingleResult();
@@ -75,7 +75,7 @@ public class ElectionRepository {
 
     // The election is finalized and no results can be altered.
     public String endElection(String date, ElectionType electionType) {
-        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+        Election e = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                 .setParameter("date", date)
                 .setParameter("electionType", electionType)
                 .getSingleResult();

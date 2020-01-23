@@ -1,6 +1,7 @@
 package repository;
 
 import data.entity.Candidate;
+import org.json.JSONArray;
 
 import javax.persistence.*;
 
@@ -31,7 +32,9 @@ public class CandidateRepository {
     }
 
     public String getCandidates() {
-        return em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList().toString();
+        return new JSONArray(
+                em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()
+        ).toString();
     }
 
 }

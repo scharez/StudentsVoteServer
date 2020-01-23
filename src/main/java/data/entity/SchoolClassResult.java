@@ -9,7 +9,7 @@ public class SchoolClassResult {
     @GeneratedValue
     private int id;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private SchoolClass schoolClass;
 
     private int score;
