@@ -2,6 +2,7 @@ package service;
 
 import data.dto.CandidatureDTO;
 import data.dto.SchoolClassResultDTO;
+import data.enums.Department;
 import data.enums.ElectionType;
 import org.json.JSONObject;
 import repository.*;
@@ -130,9 +131,10 @@ public class StudentsVoteService {
     public String createSchoolClass(String json) {
         JSONObject jsonObject = new JSONObject(json);
         String name = jsonObject.get("name").toString();
+        String department = jsonObject.get("department").toString();
         String date = jsonObject.get("date").toString();
         System.out.println("createSchoolClass");
-        return SchoolClassRepository.getInstance().createSchoolClass(name, date);
+        return SchoolClassRepository.getInstance().createSchoolClass(name, Enum.valueOf(Department.class, department), date);
     }
 
     // Creates a new SchoolClassResult

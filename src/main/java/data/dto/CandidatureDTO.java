@@ -34,6 +34,10 @@ public class CandidatureDTO {
         this.electionPromise = electionPromise;
     }
 
+    public CandidatureDTO() {
+
+    }
+
     public String getUsername() {
         return username;
     }

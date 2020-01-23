@@ -1,6 +1,7 @@
 package repository;
 
 import data.entity.SchoolClass;
+import data.enums.Department;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,14 +20,14 @@ public class SchoolClassRepository {
         return instance;
     }
 
-    public String createSchoolClass(String name, String date) {
+    public String createSchoolClass(String name, Department department, String date) {
         for(SchoolClass schoolClass : em.createQuery("SELECT sc FROM SchoolClass sc", SchoolClass.class).getResultList()) {
-            if(schoolClass.getName().equals(name) && schoolClass.getded().equals(date)) {
+            if(schoolClass.getName().equals(name) && schoolClass.getCurrentDate().equals(date)) {
                 return "SchoolClass already exists!";
             }
         }
         em.getTransaction().begin();
-        em.persist(new SchoolClass(name, date));
+        em.persist(new SchoolClass(name, department, date));
         em.getTransaction().commit();
         return "SchoolClass successfully created.";
     }

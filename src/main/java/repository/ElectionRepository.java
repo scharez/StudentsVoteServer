@@ -44,15 +44,20 @@ public class ElectionRepository {
 
     // Teachers can now start voting.
     public String startElection(String date, ElectionType electionType) {
-        Election e = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
-                .setParameter("date", date)
-                .setParameter("electionType", electionType)
-                .getSingleResult();
-        em.getTransaction().begin();
-        e.setElectionState(ElectionState.RUNNING);
-        em.merge(e);
-        em.getTransaction().commit();
-        return "Election started";
+        try {
+            Election election = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+                    .setParameter("date", date)
+                    .setParameter("electionType", electionType)
+                    .getSingleResult();
+            em.getTransaction().begin();
+            election.setElectionState(ElectionState.RUNNING);
+            em.merge(election);
+            em.getTransaction().commit();
+            return "Election started.";
+        } catch(Exception e) {
+            e.printStackTrace();
+            return "Failed to start election.";
+        }
     }
 
     // Teachers can no longer vote.

@@ -1,6 +1,7 @@
 package repository;
 
 import data.entity.*;
+import data.enums.Department;
 import data.enums.ElectionState;
 import data.enums.ElectionType;
 import jwt.JwtBuilder;
@@ -10,7 +11,6 @@ import ldapuser.LdapUser;
 import org.json.JSONObject;
 import utils.CustomException;
 import utils.Role;
-import utils.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,9 +18,13 @@ import javax.persistence.Persistence;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static data.enums.Department.ELEKTRONIK;
+import static data.enums.Department.INFORMATIK;
 
 
 public class Repository {
@@ -110,7 +114,17 @@ public class Repository {
         }
         em.getTransaction().begin();
         for (String name : lines) {
-          em.persist(new SchoolClass(name, new Date().toString()));
+          Department department;
+          if(name.substring(2).equals("HITM") || name.substring(2).equals("HIF")) {
+              department = INFORMATIK;
+          } else {
+              department = ELEKTRONIK;
+          }
+          em.persist(new SchoolClass(
+                  name,
+                  department,
+                  new SimpleDateFormat("dd/MM/yyyy").format(new Date())
+          ));
         }
         em.getTransaction().commit();
         System.out.println(file.getName());

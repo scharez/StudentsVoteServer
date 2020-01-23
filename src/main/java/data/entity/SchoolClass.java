@@ -1,5 +1,7 @@
 package data.entity;
 
+import data.enums.Department;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,13 +12,15 @@ public class SchoolClass {
     private int id;
 
     private String name;
+    private Department department;
 
     private String currentDate;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name, String currentDate) {
+    public SchoolClass(String name, Department department, String currentDate) {
         this.name = name;
+        this.department = department;
         this.currentDate = currentDate;
     }
 
@@ -36,11 +40,19 @@ public class SchoolClass {
         this.name = name;
     }
 
-    public String getded() {
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public String getCurrentDate() {
         return currentDate;
     }
 
-    public void setded(String ded) {
+    public void setCurrentDate(String ded) {
         this.currentDate = ded;
     }
 

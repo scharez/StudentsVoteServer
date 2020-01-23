@@ -20,10 +20,12 @@ public class CandidatureRepository {
 
     public String createCandidature(CandidatureDTO candidatureDTO) {
         try {
+            System.out.println(candidatureDTO.getUsername());
             Candidate candidate =
                     em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class)
                             .setParameter("username", candidatureDTO.getUsername())
                             .getSingleResult();
+            System.out.println(candidate.getUsername());
             Election election =
                     em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                             .setParameter("date", candidatureDTO.getDate())
@@ -36,6 +38,14 @@ public class CandidatureRepository {
                             .getSingleResult();
 
             em.getTransaction().begin();
+            if(candidate == null && !candidatureDTO.getFirstname().equals("")) {
+                candidate = new Candidate(
+                        candidatureDTO.getUsername(),
+                        candidatureDTO.getFirstname(),
+                        candidatureDTO.getLastname()
+                );
+                em.persist(candidate);
+            }
             em.persist(new Candidature(
                     candidate,
                     election,
@@ -44,10 +54,10 @@ public class CandidatureRepository {
                     candidatureDTO.getElectionPromise()
             ));
             em.getTransaction().commit();
-            return "Candidature successfully created";
+            return "Candidature successfully created.";
         } catch(Exception e) {
             e.printStackTrace();
-            return "Failed to create Candidature";
+            return "Failed to create Candidature.";
         }
     }
 
@@ -59,10 +69,10 @@ public class CandidatureRepository {
             em.getTransaction().begin();
             em.remove(candidature);
             em.getTransaction().commit();
-            return "Candidature successfully deleted";
+            return "Candidature successfully deleted.";
         } catch(Exception e) {
             e.printStackTrace();
-            return "Failed to delete Candidature";
+            return "Failed to delete Candidature.";
         }
     }
 
