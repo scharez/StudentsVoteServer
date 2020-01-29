@@ -51,7 +51,7 @@ public class SchoolClassResultRepository {
             candidature
                     .getSchoolClassResults()
                     .add(schoolClassResult);
-            em.persist(candidature);
+            em.merge(candidature);
             em.getTransaction().commit();
             return "Successfully created SchoolClassResult";
         } catch(Exception e) {

@@ -75,14 +75,27 @@ public class ElectionRepository {
 
     // The election is finalized and no results can be altered.
     public String endElection(String date, ElectionType electionType) {
-        Election e = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
+        Election election = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                 .setParameter("date", date)
                 .setParameter("electionType", electionType)
                 .getSingleResult();
+        List<Candidature> candidatures = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.id = :electionId", Candidature.class)
+                .setParameter("electionId", election.getId())
+                .getResultList();
         em.getTransaction().begin();
-        e.setElectionState(ElectionState.ENDED);
-        em.merge(e);
+        election.setElectionState(ElectionState.ENDED);
+        em.merge(election);
+        for(Candidature candidature : candidatures) {
+            candidature.setElection(election);
+            em.merge(candidature);
+            System.out.println(candidature.getElection().getElectionState().toString());
+        }
         em.getTransaction().commit();
+
+        for(Candidature candidature : em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList()) {
+            System.out.println(candidature.getElection().getElectionState().toString());
+        }
+
         return "Election finished";
     }
 

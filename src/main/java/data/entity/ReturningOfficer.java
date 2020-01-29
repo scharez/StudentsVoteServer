@@ -7,19 +7,20 @@ import javax.persistence.*;
 public class ReturningOfficer implements Serializable {
 
     @Id
+    @GeneratedValue
     private int id;
 
     private String username;
+    private String password;
 
-
-    public ReturningOfficer( int id, String username) {
-        this.id = id;
+    public ReturningOfficer(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     public ReturningOfficer() {
-    }
 
+    }
 
     public int getId() {
         return id;
@@ -35,6 +36,14 @@ public class ReturningOfficer implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

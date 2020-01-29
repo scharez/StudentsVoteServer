@@ -32,9 +32,7 @@ public class CandidateRepository {
     }
 
     public String getCandidates() {
-        return new JSONArray(
-                em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()
-        ).toString();
+        return new JSONArray(em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()).toString();
     }
 
 }

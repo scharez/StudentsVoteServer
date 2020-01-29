@@ -45,6 +45,12 @@ public class Repository {
 
     public String loginCheck(String username, String password) {
         CustomException ce = new CustomException();
+
+        ReturningOfficer returningOfficer = em.createQuery("SELECT ro FROM ReturningOfficer ro", ReturningOfficer.class).getSingleResult();
+        if(returningOfficer.getUsername().equals(username) && returningOfficer.getPassword().equals(password)) {
+            return jsonLoginBuilder(username, Role.ADMIN, new JwtBuilder().create(username));
+        }
+
         LdapUser lu;
         try {
             lu = new LdapUser(username, password.toCharArray());
@@ -56,9 +62,9 @@ public class Repository {
         String token;
         if (lu.isTeacher()) {
             token = new JwtBuilder().create(username);
-            if (isReturningOfficer(username)) {
-                return jsonLoginBuilder(username, Role.ADMIN, token);
-            } else {
+            //if (isReturningOfficer(username)) {
+            //    return jsonLoginBuilder(username, Role.ADMIN, token);
+            //} else {
                 try {
                     Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
                     if (e.getElectionState().equals(ElectionState.RUNNING)) {
@@ -69,7 +75,7 @@ public class Repository {
                 } catch(Exception e){
                     return jsonLoginBuilder(username, Role.Students, token);
                 }
-            }
+            //}
         } else {
             token = new JwtBuilder().create(username);
             if (isCandidate(username)) {
@@ -106,7 +112,7 @@ public class Repository {
     }
 
     public String readCsvFile(File file) {
-        List<String> lines = null;
+        List<String> lines;
         try {
           lines = Files.readAllLines(file.toPath());
         } catch (IOException e) {
@@ -142,4 +148,26 @@ public class Repository {
         System.out.println(currentVoteDate);
         return currentVoteDate;
     }
+
+    public String createReturningOfficer(String username, String password) {
+        em.getTransaction().begin();
+        em.persist(new ReturningOfficer(username, password));
+        em.getTransaction().commit();
+        return "ReturningOfficer successfully created.";
+    }
+
+    public String updateReturningOfficer(String username, String password) {
+        ReturningOfficer returningOfficer = em.createQuery("SELECT ro FROM ReturningOfficer ro", ReturningOfficer.class).getSingleResult();
+        if(!username.equals("")) {
+            returningOfficer.setUsername(username);
+        }
+        if(!password.equals("")) {
+            returningOfficer.setPassword(password);
+        }
+        em.getTransaction().begin();
+        em.merge(returningOfficer);
+        em.getTransaction().commit();
+        return "ReturningOfficer successfully updated.";
+    }
+
 }

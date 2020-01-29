@@ -109,9 +109,10 @@ public class CandidatureRepository {
     }
 
     public String getCandidatures() {
-        return new JSONArray(
-                em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList()
-        ).toString();
+        for(Candidature candidature : em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList()) {
+            System.out.println(candidature.getElection().getElectionState().toString());
+        }
+        return new JSONArray(em.createQuery("SELECT cu FROM Candidature cu", Candidature.class).getResultList()).toString();
     }
 
 }
