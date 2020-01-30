@@ -60,7 +60,7 @@ public class SchoolClassResultRepository {
     }
 
     // Returns a List SchoolClasses that still need to vote.
-    public String getVotingClasses(String date, ElectionType electionType) {
+    public String getVotingClasses(String date, String electionType) {
         List<SchoolClass> schoolClasses = em.createQuery("SELECT sc FROM SchoolClass sc", SchoolClass.class).getResultList();
         List<Candidature> candidatures = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.currentDate = :date AND cu.election.electionType = :electionType", Candidature.class)
                 .setParameter("date", date)
@@ -78,7 +78,7 @@ public class SchoolClassResultRepository {
     }
 
     // Returns a List SchoolClasses that already voted.
-    public String getFinishedClasses(String date, ElectionType electionType) {
+    public String getFinishedClasses(String date, String electionType) {
         List<SchoolClass> schoolClasses = new ArrayList<>();
         List<Candidature> candidatures = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.currentDate = :date AND cu.election.electionType = :electionType", Candidature.class)
                 .setParameter("date", date)
@@ -95,7 +95,7 @@ public class SchoolClassResultRepository {
     }
 
     // Deletes all SchoolClassResults from a SchoolClass
-    public String deleteSchoolClassResult(String schoolClassName, String date, ElectionType electionType) {
+    public String deleteSchoolClassResult(String schoolClassName, String date, String electionType) {
         List<Candidature> candidatures =
                 em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.currentDate = :date AND cu.election.electionType = :electionType", Candidature.class)
                         .setParameter("date", date)
@@ -117,7 +117,7 @@ public class SchoolClassResultRepository {
     }
 
     // Returns the current SchoolClassResults
-    public String getSchoolClassResults(String date, ElectionType electionType) {
+    public String getSchoolClassResults(String date, String electionType) {
         JSONArray toReturn = new JSONArray();
         List<Candidature> candidatures =
                 em.createQuery("SELECT cu FROM Candidature cu WHERE cu.election.currentDate = :date AND cu.election.electionType = :electionType", Candidature.class)

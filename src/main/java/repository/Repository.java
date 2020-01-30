@@ -67,7 +67,7 @@ public class Repository {
             //} else {
                 try {
                     Election e = (Election) em.createQuery("SELECT MAX(e.currentDate) FROM Election e").getSingleResult();
-                    if (e.getElectionState().equals(ElectionState.RUNNING)) {
+                    if (e.getElectionState().equals("RUNNING")) {
                             return jsonLoginBuilder(username, Role.Teacher, token);
                     } else {
                         return jsonLoginBuilder(username, Role.Students, token);
@@ -120,11 +120,11 @@ public class Repository {
         }
         em.getTransaction().begin();
         for (String name : lines) {
-          Department department;
+          String department;
           if(name.substring(2).equals("HITM") || name.substring(2).equals("HIF")) {
-              department = INFORMATIK;
+              department = "INFORMATIK";
           } else {
-              department = ELEKTRONIK;
+              department = "ELEKTRONIK";
           }
           em.persist(new SchoolClass(
                   name,
@@ -137,7 +137,7 @@ public class Repository {
         return "CSV uploaded";
     }
 
-    public String getCurrentVoteDate(ElectionType electionType) {
+    public String getCurrentVoteDate(String electionType) {
         String currentVoteDate = em.createQuery("SELECT MAX(e.currentDate) FROM Election e WHERE e.electionType = :electionType")
                 .setParameter("electionType", electionType)
                 .getSingleResult()

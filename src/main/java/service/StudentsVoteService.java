@@ -80,7 +80,7 @@ public class StudentsVoteService {
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
         System.out.println("createElection");
-        return ElectionRepository.getInstance().createElection(date, Enum.valueOf(ElectionType.class, electionType));
+        return ElectionRepository.getInstance().createElection(date, electionType);
 
     }
 
@@ -94,7 +94,7 @@ public class StudentsVoteService {
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return ElectionRepository.getInstance().startElection(date, Enum.valueOf(ElectionType.class, electionType));
+        return ElectionRepository.getInstance().startElection(date, electionType);
     }
 
     // Sets ElectionState to 'stopped'
@@ -107,7 +107,7 @@ public class StudentsVoteService {
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return ElectionRepository.getInstance().endElectionTeacher(date, Enum.valueOf(ElectionType.class, electionType));
+        return ElectionRepository.getInstance().endElectionTeacher(date, electionType);
     }
 
     // Sets ElectionState to 'finished'
@@ -120,7 +120,7 @@ public class StudentsVoteService {
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return ElectionRepository.getInstance().endElection(date, Enum.valueOf(ElectionType.class, electionType));
+        return ElectionRepository.getInstance().endElection(date, electionType);
     }
 
     // Creates new SchoolClass
@@ -134,7 +134,7 @@ public class StudentsVoteService {
         String department = jsonObject.get("department").toString();
         String date = jsonObject.get("date").toString();
         System.out.println("createSchoolClass");
-        return SchoolClassRepository.getInstance().createSchoolClass(name, Enum.valueOf(Department.class, department), date);
+        return SchoolClassRepository.getInstance().createSchoolClass(name, department, date);
     }
 
     // Creates a new SchoolClassResult
@@ -157,7 +157,7 @@ public class StudentsVoteService {
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return SchoolClassResultRepository.getInstance().getVotingClasses(date, Enum.valueOf(ElectionType.class, electionType));
+        return SchoolClassResultRepository.getInstance().getVotingClasses(date, electionType);
     }
 
     // Returns all SchoolClasses that have already voted
@@ -170,7 +170,7 @@ public class StudentsVoteService {
         JSONObject jsonObject = new JSONObject(json);
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return SchoolClassResultRepository.getInstance().getFinishedClasses(date, Enum.valueOf(ElectionType.class, electionType));
+        return SchoolClassResultRepository.getInstance().getFinishedClasses(date, electionType);
     }
 
     // Deletes all SchoolClassResults of a chosen SchoolClass
@@ -184,7 +184,7 @@ public class StudentsVoteService {
         String schoolClassName = jsonObject.get("schoolClassName").toString();
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
-        return SchoolClassResultRepository.getInstance().deleteSchoolClassResult(schoolClassName, date, Enum.valueOf(ElectionType.class, electionType));
+        return SchoolClassResultRepository.getInstance().deleteSchoolClassResult(schoolClassName, date, electionType);
     }
 
     // Returns all candidates, scores and first
@@ -197,7 +197,7 @@ public class StudentsVoteService {
         String date = jsonObject.get("date").toString();
         String electionType = jsonObject.get("electionType").toString();
         System.out.println("getSchoolClassResult");
-        return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, Enum.valueOf(ElectionType.class, electionType));
+        return SchoolClassResultRepository.getInstance().getSchoolClassResults(date, electionType);
     }
 
     // Upload a file of all new SchoolClasses
@@ -215,7 +215,7 @@ public class StudentsVoteService {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public String getCurrentVoteDate(String electionType) {
-        return Repository.getInstance().getCurrentVoteDate(Enum.valueOf(ElectionType.class, electionType));
+        return Repository.getInstance().getCurrentVoteDate(electionType);
     }
 
     @Path("deleteCandidature")

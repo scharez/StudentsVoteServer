@@ -11,12 +11,12 @@ public class CandidatureDTO {
     private String firstname = "";
     private String lastname = "";
     private String date;
-    private ElectionType electionType;
+    private String electionType;
     private String schoolClassName;
     private File picture;
     private String electionPromise;
 
-    public CandidatureDTO(String username, String date, ElectionType electionType, String schoolClassName, File picture, String electionPromise) {
+    public CandidatureDTO(String username, String date, String electionType, String schoolClassName, File picture, String electionPromise) {
         this.username = username;
         this.date = date;
         this.electionType = electionType;
@@ -25,10 +25,12 @@ public class CandidatureDTO {
         this.electionPromise = electionPromise;
     }
 
-    public CandidatureDTO(String username, String fistname, String lastname, String schoolClassName, File picture, String electionPromise) {
+    public CandidatureDTO(String username, String firstname, String lastname, String date, String electionType, String schoolClassName, File picture, String electionPromise) {
         this.username = username;
-        this.firstname = fistname;
+        this.firstname = firstname;
         this.lastname = lastname;
+        this.date = date;
+        this.electionType = electionType;
         this.schoolClassName = schoolClassName;
         this.picture = picture;
         this.electionPromise = electionPromise;
@@ -70,11 +72,11 @@ public class CandidatureDTO {
         this.date = date;
     }
 
-    public ElectionType getElectionType() {
+    public String getElectionType() {
         return electionType;
     }
 
-    public void setElectionType(ElectionType electionType) {
+    public void setElectionType(String electionType) {
         this.electionType = electionType;
     }
 

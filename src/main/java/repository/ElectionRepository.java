@@ -23,7 +23,7 @@ public class ElectionRepository {
         return instance;
     }
 
-    public String createElection(String date, ElectionType electionType) {
+    public String createElection(String date, String electionType) {
         /*for(Election election : em.createQuery("SELECT e FROM Candidate e", Election.class).getResultList()) {
             if(!election.getElectionType().equals(ElectionType.STICHWAHL)) {
                 if(election.getDate().equals(date) && election.getElectionType().equals(electionType)) {
@@ -43,14 +43,14 @@ public class ElectionRepository {
     }
 
     // Teachers can now start voting.
-    public String startElection(String date, ElectionType electionType) {
+    public String startElection(String date, String electionType) {
         try {
             Election election = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                     .setParameter("date", date)
                     .setParameter("electionType", electionType)
                     .getSingleResult();
             em.getTransaction().begin();
-            election.setElectionState(ElectionState.RUNNING);
+            election.setElectionState("RUNNING");
             em.merge(election);
             em.getTransaction().commit();
             return "Election started.";
@@ -61,20 +61,20 @@ public class ElectionRepository {
     }
 
     // Teachers can no longer vote.
-    public String endElectionTeacher(String date, ElectionType electionType) {
+    public String endElectionTeacher(String date, String electionType) {
         Election e = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                         .setParameter("date", date)
                         .setParameter("electionType", electionType)
                         .getSingleResult();
         em.getTransaction().begin();
-        e.setElectionState(ElectionState.STOPPED);
+        e.setElectionState("STOPPED");
         em.merge(e);
         em.getTransaction().commit();
         return "Election for Teacher ended";
     }
 
     // The election is finalized and no results can be altered.
-    public String endElection(String date, ElectionType electionType) {
+    public String endElection(String date, String electionType) {
         Election election = em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                 .setParameter("date", date)
                 .setParameter("electionType", electionType)
@@ -83,7 +83,7 @@ public class ElectionRepository {
                 .setParameter("electionId", election.getId())
                 .getResultList();
         em.getTransaction().begin();
-        election.setElectionState(ElectionState.ENDED);
+        election.setElectionState("ENDED");
         em.merge(election);
         for(Candidature candidature : candidatures) {
             candidature.setElection(election);

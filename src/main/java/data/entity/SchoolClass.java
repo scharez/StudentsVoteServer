@@ -12,13 +12,13 @@ public class SchoolClass {
     private int id;
 
     private String name;
-    private Department department;
+    private String department;
 
     private String currentDate;
 
     public SchoolClass() {}
 
-    public SchoolClass(String name, Department department, String currentDate) {
+    public SchoolClass(String name, String department, String currentDate) {
         this.name = name;
         this.department = department;
         this.currentDate = currentDate;
@@ -40,11 +40,11 @@ public class SchoolClass {
         this.name = name;
     }
 
-    public Department getDepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(Department department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 

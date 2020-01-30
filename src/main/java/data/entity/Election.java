@@ -14,15 +14,15 @@ public class Election {
 
     private String currentDate;
 
-    private ElectionType electionType;
-    private ElectionState electionState;
+    private String electionType;
+    private String electionState;
 
     public Election() {
-        this.electionState = ElectionState.NEW;
+        this.electionState = "NEW";
     }
 
-    public Election(String currentDate, ElectionType electionType) {
-        this.electionState = ElectionState.NEW;
+    public Election(String currentDate, String electionType) {
+        this.electionState = "NEW";
         this.currentDate = currentDate;
         this.electionType = electionType;
     }
@@ -43,19 +43,19 @@ public class Election {
         this.currentDate = currentDate;
     }
 
-    public ElectionType getElectionType() {
+    public String getElectionType() {
         return electionType;
     }
 
-    public void setElectionType(ElectionType electionType) {
+    public void setElectionType(String electionType) {
         this.electionType = electionType;
     }
 
-    public ElectionState getElectionState() {
+    public String getElectionState() {
         return electionState;
     }
 
-    public void setElectionState(ElectionState electionState) {
+    public void setElectionState(String electionState) {
         this.electionState = electionState;
     }
 
