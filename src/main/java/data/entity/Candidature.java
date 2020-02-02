@@ -12,10 +12,10 @@ public class Candidature {
     @GeneratedValue
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Candidate candidate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Election election;
 
     @OneToOne

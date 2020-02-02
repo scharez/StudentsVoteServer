@@ -170,4 +170,15 @@ public class Repository {
         return "ReturningOfficer successfully updated.";
     }
 
+    public List<Election> getElections() {
+
+        List<Election> allElections = em.createQuery("SELECT e FROM Election e WHERE e.electionState != 'nix'")
+                .getResultList();
+        if(!allElections.isEmpty()){
+            System.out.println(allElections.get(0).getElectionState());
+        }
+
+        return allElections;
+
+    }
 }

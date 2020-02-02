@@ -13,17 +13,15 @@ public class Election {
     private int id;
 
     private String currentDate;
-
-    private String electionType;
     private String electionState;
+    private String electionType;
 
-    public Election() {
-        this.electionState = "NEW";
+    public Election(){
     }
 
-    public Election(String currentDate, String electionType) {
-        this.electionState = "NEW";
+    public Election(String currentDate, String electionType, String electionState) {
         this.currentDate = currentDate;
+        this.electionState = electionState;
         this.electionType = electionType;
     }
 

@@ -2,8 +2,10 @@ package service;
 
 import data.dto.CandidatureDTO;
 import data.dto.SchoolClassResultDTO;
+import data.entity.Election;
 import data.enums.Department;
 import data.enums.ElectionType;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONObject;
 import repository.*;
 import utils.User;
@@ -12,6 +14,7 @@ import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.util.List;
 
 @Path("sv")
 public class StudentsVoteService {
@@ -49,7 +52,7 @@ public class StudentsVoteService {
     @Path("createCandidate")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String createCandidate(String json){
         JSONObject jsonObject = new JSONObject(json);
         String username = jsonObject.get("username").toString();
@@ -63,7 +66,7 @@ public class StudentsVoteService {
     @Path("createCandidature")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String createCandidature(CandidatureDTO candidatureDTO) {
         System.out.println("createCandidature");
         return CandidatureRepository.getInstance().createCandidature(candidatureDTO);
@@ -73,7 +76,7 @@ public class StudentsVoteService {
     @Path("createElection")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String createElection(String json) {
         System.out.println("Im createElection");
         JSONObject jsonObject = new JSONObject(json);
@@ -204,33 +207,38 @@ public class StudentsVoteService {
     @Path("uploadCSV")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String uploadCSV(@FormParam("file") File file) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String uploadCSV(@FormDataParam("file") File file) {
         return Repository.getInstance().readCsvFile(file);
     }
 
     // Returns the date of the election
     @Path("getCurrentVoteDate")
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCurrentVoteDate(String electionType) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getCurrentVoteDate(String electionType_json) {
+        JSONObject jsonObject = new JSONObject(electionType_json);
+        String electionType = jsonObject.get("electionType").toString();
         return Repository.getInstance().getCurrentVoteDate(electionType);
     }
 
     @Path("deleteCandidature")
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String deleteCandidature(String username) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteCandidature(String username_json) {
+        JSONObject jsonObject = new JSONObject(username_json);
+        String username = jsonObject.get("username").toString();
         return CandidatureRepository.getInstance().deleteCandidature(username);
     }
 
     @Path("updateCandidature")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String updateCandidature(CandidatureDTO candidatureDTO) {
+        System.out.println("hey");
         return CandidatureRepository.getInstance().updateCandidature(candidatureDTO);
     }
 
@@ -240,5 +248,20 @@ public class StudentsVoteService {
     public String getCandidatures() {
         return CandidatureRepository.getInstance().getCandidatures();
     }
+
+    @Path("getSchoolClasses")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> getSchoolClasses() {
+        return SchoolClassResultRepository.getInstance().getSchoolClasses();
+    }
+
+    @Path("getElections")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Election> getElections() {
+        return Repository.getInstance().getElections();
+    }
+
 
 }

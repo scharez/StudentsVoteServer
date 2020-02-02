@@ -2,6 +2,7 @@ package repository;
 
 import data.entity.Candidate;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 
@@ -18,17 +19,20 @@ public class CandidateRepository {
         }
         return instance;
     }
-
     public String createCandidate(String username, String firstname, String lastname) {
         for(Candidate candidate : em.createQuery("SELECT c FROM Candidate c", Candidate.class).getResultList()) {
             if(candidate.getUsername().equals(username)) {
-                return "Candidate already exists!";
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("status", "Candidate already exists!");
+                return jsonObject.toString();
             }
         }
         em.getTransaction().begin();
         em.persist(new Candidate(username, firstname, lastname));
         em.getTransaction().commit();
-        return "Candidate successfully created.";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", "success");
+        return jsonObject.toString();
     }
 
     public String getCandidates() {

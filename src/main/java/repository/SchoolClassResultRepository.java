@@ -73,7 +73,8 @@ public class SchoolClassResultRepository {
                 }
             }
         }
-        // return new Gson().toJson(schoolClasses);
+        System.out.println(new JSONArray(schoolClasses).toString());
+        //return new Gson().toJson(schoolClasses);
         return new JSONArray(schoolClasses).toString();
     }
 
@@ -143,4 +144,10 @@ public class SchoolClassResultRepository {
         return toReturn.toString();
     }
 
+    public List<String> getSchoolClasses() {
+
+        List<String> schoolClasses = em.createQuery("SELECT sc.name FROM SchoolClass sc").getResultList();
+
+        return schoolClasses;
+    }
 }

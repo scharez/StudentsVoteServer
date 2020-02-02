@@ -36,6 +36,16 @@ public class CandidatureDTO {
         this.electionPromise = electionPromise;
     }
 
+    public CandidatureDTO(String username, String firstname, String lastname, String date, String electionType, String schoolClassName, String electionPromise) {
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.date = date;
+        this.electionType = electionType;
+        this.schoolClassName = schoolClassName;
+        this.electionPromise = electionPromise;
+    }
+
     public CandidatureDTO() {
 
     }

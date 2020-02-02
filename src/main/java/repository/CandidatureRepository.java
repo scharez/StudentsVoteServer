@@ -3,6 +3,7 @@ package repository;
 import data.dto.CandidatureDTO;
 import data.entity.*;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.persistence.*;
 
@@ -28,6 +29,7 @@ public class CandidatureRepository {
                             .setParameter("username", candidatureDTO.getUsername())
                             .getSingleResult();
             System.out.println(candidate.getUsername());
+            System.out.println(candidatureDTO.getDate() + " " + candidatureDTO.getElectionType());
             Election election =
                     em.createQuery("SELECT e FROM Election e WHERE e.currentDate = :date AND e.electionType = :electionType", Election.class)
                             .setParameter("date", candidatureDTO.getDate())
@@ -56,14 +58,21 @@ public class CandidatureRepository {
                     candidatureDTO.getElectionPromise()
             ));
             em.getTransaction().commit();
-            return "Candidature successfully created.";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("status", "Candidature successfully created.");
+            return jsonObject.toString();
         } catch(Exception e) {
             e.printStackTrace();
-            return "Failed to create Candidature.";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("status", "Failed to create Candidature.");
+            return jsonObject.toString();
         }
     }
 
     public String deleteCandidature(String username) {
+
+        JSONObject jsonObject = new JSONObject();
+
         try {
             Candidature candidature = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.candidate.username = :username ORDER BY cu.election.currentDate DESC", Candidature.class)
                     .setParameter("username", username)
@@ -71,14 +80,21 @@ public class CandidatureRepository {
             em.getTransaction().begin();
             em.remove(candidature);
             em.getTransaction().commit();
-            return "Candidature successfully deleted.";
+
+            jsonObject.put("status", "Candidature successfully deleted.");
+            return jsonObject.toString();
         } catch(Exception e) {
             e.printStackTrace();
-            return "Failed to delete Candidature.";
+            jsonObject.put("status", "Failed to delete Candidature.");
+            return jsonObject.toString();
+
         }
     }
 
     public String updateCandidature(CandidatureDTO candidatureDTO) {
+        System.out.println(candidatureDTO.getUsername());
+        System.out.println(candidatureDTO.getSchoolClassName());
+        JSONObject jsonObject = new JSONObject();
         try {
             Candidature candidature = em.createQuery("SELECT cu FROM Candidature cu WHERE cu.candidate.username = :username ORDER BY cu.election.currentDate DESC", Candidature.class)
                     .setParameter("username", candidatureDTO.getUsername())
@@ -101,10 +117,25 @@ public class CandidatureRepository {
             em.merge(candidature);
             em.merge(candidate);
             em.getTransaction().commit();
-            return "Candidature successfully updated";
+            System.out.println("hey");
+
+            jsonObject.put("status", "Candidature successfully updated");
+            return jsonObject.toString();
         } catch(Exception e) {
-            e.printStackTrace();
-            return "Failed to update Candidature";
+            try{
+                Candidate candidate = em.createQuery("SELECT c FROM Candidate c WHERE c.username = :username", Candidate.class)
+                        .setParameter("username", candidatureDTO.getUsername())
+                        .getSingleResult();
+                em.getTransaction().begin();
+                em.remove(candidate);
+                em.getTransaction().commit();
+                jsonObject.put("status", "Failed to update Candidature");
+                return jsonObject.toString();
+            } catch (Exception ee){
+                ee.printStackTrace();
+                jsonObject.put("status", "Failed to delete Candidate while failing to update Candidature");
+                return jsonObject.toString();
+            }
         }
     }
 

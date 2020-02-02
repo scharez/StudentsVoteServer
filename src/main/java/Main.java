@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 
@@ -15,7 +16,7 @@ public class Main {
 
     public static org.glassfish.grizzly.http.server.HttpServer startServer() {
 
-        final ResourceConfig rc = new ResourceConfig().packages("service","filter");
+        final ResourceConfig rc = new ResourceConfig().packages("service","filter").register(MultiPartFeature.class);
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
